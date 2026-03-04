@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DISCIPL.AI</title>
+<style>
+/* ── THEME VARS ── */
+:root[data-theme="dark"] {
+  --bg:#0F0A1A; --bg2:#1A0F2E; --card:#1E1232; --border:#2D1B5E;
+  --text:#F3F4F6; --muted:#9CA3AF; --purple:#8B5CF6; --purple2:#6D28D9;
+  --accent:#A855F7; --green:#10B981; --red:#EF4444; --yellow:#F59E0B;
+  --sidebar-bg:#150C25; --nav-bg:#1A0F2E; --input-bg:#2D1B5E;
+  --shadow:rgba(139,92,246,0.2); --hover:#251545;
+}
+:root[data-theme="light"] {
+  --bg:#F5F3FF; --bg2:#EDE9FE; --card:#FFFFFF; --border:#DDD6FE;
+  --text:#1E1B2E; --muted:#6B7280; --purple:#7C3AED; --purple2:#6D28D9;
+  --accent:#8B5CF6; --green:#059669; --red:#DC2626; --yellow:#D97706;
+  --sidebar-bg:#F3EFFE; --nav-bg:#FFFFFF; --input-bg:#EDE9FE;
+  --shadow:rgba(109,40,217,0.12); --hover:#EDE9FE;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;transition:background-color .3s,color .3s,border-color .3s;}
+html{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);}
+body{display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── NAVBAR ── */
+.navbar{background:var(--nav-bg);border-bottom:1px solid var(--border);padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 20px var(--shadow);}
+.logo{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;cursor:pointer;}
+.nav-links a:hover,.nav-links a.active{color:var(--purple);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.btn-sm{background:var(--input-bg);border:1px solid var(--border);border-radius:20px;padding:6px 14px;
+  cursor:pointer;color:var(--text);font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;}
+.btn-sm:hover{border-color:var(--purple);}
+.btn-primary{background:linear-gradient(135deg,var(--purple2),var(--accent));border:none;border-radius:20px;
+  padding:8px 18px;cursor:pointer;color:white;font-size:13px;font-weight:600;
+  box-shadow:0 4px 15px var(--shadow);display:inline-flex;align-items:center;gap:6px;}
+.btn-primary:hover{opacity:.9;}
+.nav-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:white;cursor:pointer;}
+.menu-btn{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px;}
+
+/* ── LAYOUT ── */
+.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 64px);}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;background:var(--sidebar-bg);border-right:1px solid var(--border);
+  padding:20px 14px;overflow-y:auto;transition:transform .3s;flex-shrink:0;}
+.sidebar-nav{display:flex;flex-direction:column;gap:3px;}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:10px;
+  cursor:pointer;color:var(--muted);font-size:14px;font-weight:500;transition:all .2s;user-select:none;}
+.sidebar-item:hover{background:var(--hover);color:var(--text);}
+.sidebar-item.active{background:linear-gradient(135deg,var(--purple2),var(--purple));color:white;
+  box-shadow:0 4px 15px var(--shadow);}
+.sidebar-icon{font-size:17px;width:20px;text-align:center;flex-shrink:0;}
+.sidebar-section{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;margin:14px 0 6px 13px;}
+.streak-box{margin-top:20px;background:linear-gradient(135deg,var(--purple2),var(--accent));
+  border-radius:12px;padding:14px;text-align:center;}
+.streak-box .snum{font-size:28px;font-weight:800;color:white;}
+.streak-box .slbl{font-size:11px;color:rgba(255,255,255,.8);margin-top:2px;}
+.streak-box .ssub{font-size:10px;color:rgba(255,255,255,.6);margin-top:3px;}
+
+/* ── MAIN ── */
+.main{flex:1;padding:28px;overflow-y:auto;background:var(--bg);}
+.page{display:none;}
+.page.active{display:block;}
+.page-title{font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.page-subtitle{font-size:13px;color:var(--muted);margin-bottom:24px;}
+
+/* ── SHARED CARDS ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;box-shadow:0 4px 20px var(--shadow);}
+.card-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;
+  position:relative;overflow:hidden;box-shadow:0 4px 20px var(--shadow);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--purple),var(--accent));}
+.stat-label{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:8px;
+  text-transform:uppercase;letter-spacing:.5px;}
+.stat-value{font-size:30px;font-weight:800;color:var(--text);line-height:1;}
+.stat-sub{font-size:11px;color:var(--green);margin-top:5px;font-weight:500;}
+.stat-icon{position:absolute;top:16px;right:16px;font-size:26px;opacity:.5;}
+
+/* ── PROGRESS BAR ── */
+.pbar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.pbar-lbl{font-size:12px;color:var(--muted);width:100px;flex-shrink:0;}
+.pbar{flex:1;height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--purple),var(--accent));}
+.pbar-val{font-size:12px;font-weight:600;color:var(--purple);width:34px;text-align:right;}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:600;border:1px solid;}
+.badge.purple{background:rgba(139,92,246,.12);border-color:var(--purple);color:var(--purple);}
+.badge.green{background:rgba(16,185,129,.12);border-color:var(--green);color:var(--green);}
+.badge.yellow{background:rgba(245,158,11,.12);border-color:var(--yellow);color:var(--yellow);}
+.badge.red{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red);}
+
+/* ── TABS ── */
+.tab-btn{padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--border);color:var(--muted);background:transparent;transition:all .2s;}
+.tab-btn.active,.tab-btn:hover{background:var(--purple);color:white;border-color:var(--purple);}
+
+/* ── GRIDS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.grid-aside{display:grid;grid-template-columns:290px 1fr;gap:16px;}
+
+/* ── SCORE RING ── */
+.score-card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:24px 20px;display:flex;flex-direction:column;align-items:center;
+  box-shadow:0 4px 20px var(--shadow);}
+.ring-wrap{position:relative;margin:8px 0;}
+.score-svg{transform:rotate(-90deg);}
+.ring-track{fill:none;stroke:var(--border);stroke-width:14;}
+.ring-fill{fill:none;stroke:url(#rg);stroke-width:14;stroke-linecap:round;
+  stroke-dasharray:408;stroke-dashoffset:98;}
+.ring-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.ring-num{font-size:38px;font-weight:800;color:var(--text);line-height:1;}
+.ring-lbl{font-size:10px;color:var(--muted);font-weight:600;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--border);}
+.breakdown-row:last-child{border-bottom:none;}
+.bd-label{font-size:12px;color:var(--muted);}
+.bd-bar{height:4px;background:var(--border);border-radius:2px;flex:1;margin:0 10px;}
+.bd-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple),var(--accent));}
+.bd-val{font-size:12px;font-weight:600;color:var(--purple);}
+
+/* ── MINI BAR CHART ── */
+.mini-chart{height:100px;display:flex;align-items:flex-end;gap:5px;}
+.mbar{flex:1;background:linear-gradient(180deg,var(--accent),var(--purple2));border-radius:3px 3px 0 0;
+  min-height:6px;opacity:.8;cursor:pointer;transition:opacity .2s;}
+.mbar:hover,.mbar.hi{opacity:1;}
+.chart-lbl-row{display:flex;gap:5px;margin-top:5px;}
+.chart-lbl{flex:1;text-align:center;font-size:9px;color:var(--muted);}
+
+/* ── HABITS ── */
+.habit-list{display:flex;flex-direction:column;gap:10px;}
+.habit-row{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 10px var(--shadow);}
+.habit-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:14px;}
+.habit-check.done{background:var(--green);border-color:var(--green);color:white;}
+.habit-info{flex:1;}
+.habit-name{font-size:14px;font-weight:600;color:var(--text);}
+.habit-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.habit-streak{font-size:12px;font-weight:700;color:var(--accent);}
+.habit-pts{font-size:11px;color:var(--green);text-align:right;margin-top:2px;}
+
+/* ── WORKOUT CARDS ── */
+.workout-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;box-shadow:0 4px 16px var(--shadow);transition:transform .2s;}
+.workout-card:hover{transform:translateY(-2px);}
+.wk-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.wk-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;background:linear-gradient(135deg,var(--purple2),var(--accent));flex-shrink:0;}
+.wk-title{font-size:15px;font-weight:700;color:var(--text);}
+.wk-sub{font-size:11px;color:var(--muted);}
+.wk-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+.wk-stat{text-align:center;background:var(--bg2);border-radius:8px;padding:8px;}
+.wk-stat-val{font-size:16px;font-weight:700;color:var(--purple);}
+.wk-stat-lbl{font-size:10px;color:var(--muted);}
+.wk-tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;
+  background:rgba(139,92,246,.12);border:1px solid var(--purple);color:var(--purple);margin-right:4px;margin-bottom:4px;}
+
+/* ── PROGRESS PHOTOS ── */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.photo-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;box-shadow:0 4px 16px var(--shadow);}
+.photo-thumb{height:150px;display:flex;align-items:center;justify-content:center;
+  font-size:48px;background:linear-gradient(135deg,var(--bg2),var(--border));}
+.photo-info{padding:12px;}
+.photo-date{font-size:12px;font-weight:600;color:var(--text);}
+.photo-weight{font-size:11px;color:var(--muted);margin-top:2px;}
+.compare-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.compare-img{height:170px;display:flex;align-items:center;justify-content:center;font-size:56px;
+  background:linear-gradient(135deg,var(--bg2),var(--border));border-radius:10px;}
+.compare-label{font-size:12px;font-weight:700;padding:8px;background:var(--bg2);
+  border-radius:0 0 10px 10px;text-align:center;color:var(--text);}
+
+/* ── COMMUNITY ── */
+.feed-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;box-shadow:0 4px 16px var(--shadow);transition:transform .2s;}
+.feed-card:hover{transform:translateY(-2px);}
+.feed-img-thumb{height:130px;display:flex;align-items:center;justify-content:center;
+  font-size:44px;background:linear-gradient(135deg,var(--bg2),var(--purple2));}
+.feed-body{padding:14px;}
+.feed-user{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.feed-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
+.feed-name{font-size:13px;font-weight:600;color:var(--text);}
+.feed-badge2{font-size:9px;background:var(--purple);color:white;padding:2px 7px;border-radius:10px;margin-left:auto;white-space:nowrap;}
+.feed-text{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;}
+.feed-actions{display:flex;gap:14px;}
+.feed-btn{font-size:11px;color:var(--muted);cursor:pointer;background:none;border:none;
+  display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:8px;transition:all .2s;}
+.feed-btn:hover{color:var(--purple);background:var(--hover);}
+
+/* ── CHALLENGES ── */
+.challenge-hero{background:linear-gradient(135deg,var(--purple2),var(--accent));border-radius:16px;
+  padding:28px;margin-bottom:20px;color:white;position:relative;overflow:hidden;}
+.challenge-hero::after{content:'🏆';position:absolute;right:20px;top:50%;transform:translateY(-50%);
+  font-size:80px;opacity:.2;}
+.ch-title{font-size:22px;font-weight:800;margin-bottom:6px;}
+.ch-sub{font-size:13px;opacity:.85;margin-bottom:16px;}
+.ch-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.ch-stat-val{font-size:20px;font-weight:800;}
+.ch-stat-lbl{font-size:10px;opacity:.75;}
+.challenge-card-sm{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:18px;box-shadow:0 4px 16px var(--shadow);}
+.ch-badge-pill{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:10px;}
+.ch-badge-pill.active{background:rgba(16,185,129,.15);color:var(--green);border:1px solid var(--green);}
+.ch-badge-pill.upcoming{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid var(--yellow);}
+
+/* ── LEADERBOARD ── */
+.lb-row{display:flex;align-items:center;gap:12px;padding:11px 14px;
+  background:var(--bg2);border-radius:10px;margin-bottom:8px;}
+.lb-row.me{border:1.5px solid var(--purple);background:rgba(139,92,246,.08);}
+.lb-rank{font-size:15px;font-weight:800;color:var(--muted);width:24px;text-align:center;flex-shrink:0;}
+.lb-rank.g{color:#F59E0B;}.lb-rank.s{color:#9CA3AF;}.lb-rank.b{color:#D97706;}
+.lb-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.lb-info{flex:1;min-width:0;}
+.lb-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lb-meta{font-size:11px;color:var(--muted);}
+.lb-score{font-size:17px;font-weight:800;color:var(--purple);flex-shrink:0;}
+.lb-bar-wrap{width:70px;flex-shrink:0;}
+.lb-bar{height:4px;background:var(--border);border-radius:2px;}
+.lb-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--accent));border-radius:2px;}
+
+/* ── AI INSIGHTS ── */
+.ai-card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;box-shadow:0 4px 20px var(--shadow);margin-bottom:16px;}
+.ai-badge-pill{display:inline-flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,var(--purple2),var(--accent));color:white;
+  padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:8px;}
+.ai-msg{font-size:14px;color:var(--text);line-height:1.65;}
+.ai-tip-box{background:var(--bg2);border-left:3px solid var(--purple);
+  padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--muted);
+  margin-top:10px;line-height:1.55;}
+.insight-metric{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--border);}
+.insight-metric:last-child{border-bottom:none;}
+.im-label{font-size:13px;color:var(--text);}
+.im-val{font-size:14px;font-weight:700;color:var(--accent);}
+
+/* ── ANALYTICS ── */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:110px;margin-bottom:8px;}
+.bcbar{flex:1;border-radius:3px 3px 0 0;min-height:6px;}
+.bcbar-lbl{font-size:9px;color:var(--muted);text-align:center;margin-top:4px;}
+
+/* ── SETTINGS ── */
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;margin-bottom:16px;box-shadow:0 4px 16px var(--shadow);}
+.settings-section-title{font-size:12px;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;}
+.setting-row{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--border);}
+.setting-row:last-child{border-bottom:none;}
+.setting-label{font-size:14px;color:var(--text);font-weight:500;}
+.setting-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.toggle-track{width:44px;height:24px;background:var(--border);border-radius:12px;
+  position:relative;cursor:pointer;transition:background .3s;flex-shrink:0;}
+.toggle-track.on{background:var(--purple);}
+.toggle-thumb{width:18px;height:18px;background:white;border-radius:50%;
+  position:absolute;top:3px;left:3px;transition:left .3s;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.toggle-track.on .toggle-thumb{left:23px;}
+.theme-picker{display:flex;gap:10px;margin:10px 0;}
+.theme-opt{padding:8px 18px;border-radius:20px;border:2px solid var(--border);
+  font-size:13px;cursor:pointer;font-weight:500;color:var(--muted);transition:all .2s;}
+.theme-opt.selected{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,.1);}
+.profile-av-lg{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:white;flex-shrink:0;}
+.input-field{background:var(--input-bg);border:1px solid var(--border);border-radius:8px;
+  padding:9px 13px;font-size:13px;color:var(--text);width:100%;margin-top:6px;outline:none;
+  font-family:inherit;}
+.input-field:focus{border-color:var(--purple);}
+.input-label{font-size:12px;color:var(--muted);font-weight:500;}
+.form-row{margin-bottom:14px;}
+.plan-card{border:2px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;}
+.plan-card.active-plan{border-color:var(--purple);background:rgba(139,92,246,.06);}
+
+/* ── PREDICTION BOX ── */
+.pred-box{background:linear-gradient(135deg,rgba(109,40,217,.15),rgba(168,85,247,.1));
+  border:1px solid var(--purple);border-radius:12px;padding:16px;margin-top:12px;}
+.pred-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(139,92,246,.2);}
+.pred-row:last-child{border-bottom:none;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .grid3{grid-template-columns:1fr 1fr;}
+  .grid-aside{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .sidebar{position:fixed;top:64px;left:0;height:calc(100vh - 64px);
+    transform:translateX(-100%);z-index:150;width:240px;}
+  .sidebar.open{transform:translateX(0);}
+  .menu-btn{display:block;}
+  .nav-links{display:none;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:1fr 1fr;}
+  .main{padding:16px;}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:1fr;}
+  .ch-stats{gap:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar">
+  <div style="display:flex;align-items:center;gap:14px;">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="logo">Discipl.ai</div>
+  </div>
+  <div class="nav-links">
+    <a onclick="navigate('dashboard')" id="nl-dashboard" class="active">Dashboard</a>
+    <a onclick="navigate('challenges')" id="nl-challenges">Challenges</a>
+    <a onclick="navigate('analytics')" id="nl-analytics">Analytics</a>
+    <a onclick="navigate('community')" id="nl-community">Community</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-sm" style="position:relative;" title="3 notifications">
+      🔔 <span style="position:absolute;top:-4px;right:-4px;background:var(--red);color:white;font-size:9px;font-weight:700;border-radius:10px;padding:1px 5px;">3</span>
+    </button>
+    <button class="btn-sm" onclick="navigate('settings')">⚙ Settings</button>
+    <div class="nav-avatar">AG</div>
+  </div>
+</nav>
+
+<!-- ═══ LAYOUT ═══ -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">Main</div>
+  <div class="sidebar-nav">
+    <div class="sidebar-item active" data-page="dashboard" onclick="navigate('dashboard')"><span class="sidebar-icon">⊞</span>Dashboard</div>
+    <div class="sidebar-item" data-page="habits" onclick="navigate('habits')"><span class="sidebar-icon">✅</span>Habits</div>
+    <div class="sidebar-item" data-page="workouts" onclick="navigate('workouts')"><span class="sidebar-icon">⚡</span>Workouts</div>
+    <div class="sidebar-item" data-page="photos" onclick="navigate('photos')"><span class="sidebar-icon">📷</span>Progress Photos</div>
+  </div>
+  <div class="sidebar-section">Community</div>
+  <div class="sidebar-nav">
+    <div class="sidebar-item" data-page="community" onclick="navigate('community')"><span class="sidebar-icon">👥</span>Community Feed</div>
+    <div class="sidebar-item" data-page="challenges" onclick="navigate('challenges')"><span class="sidebar-icon">🏆</span>Challenges</div>
+    <div class="sidebar-item" data-page="leaderboard" onclick="navigate('leaderboard')"><span class="sidebar-icon">📊</span>Leaderboard</div>
+  </div>
+  <div class="sidebar-section">Insights</div>
+  <div class="sidebar-nav">
+    <div class="sidebar-item" data-page="ai" onclick="navigate('ai')"><span class="sidebar-icon">🤖</span>AI Insights</div>
+    <div class="sidebar-item" data-page="analytics" onclick="navigate('analytics')"><span class="sidebar-icon">📈</span>Analytics</div>
+    <div class="sidebar-item" data-page="settings" onclick="navigate('settings')"><span class="sidebar-icon">⚙</span>Settings</div>
+  </div>
+  <div class="streak-box">
+    <div class="snum">🔥 14</div>
+    <div class="slbl">Day Streak</div>
+    <div class="ssub">Keep it up, Atchayam!</div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="mainArea">
+
+<!-- ═════════════════════ DASHBOARD ═════════════════════ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-title">Dashboard</div>
+  <div class="page-subtitle">Sunday, March 1, 2026 · Week 9 of your journey</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-icon">🔥</span><div class="stat-label">Current Streak</div><div class="stat-value">14</div><div class="stat-sub">↑ 2 days vs last week</div></div>
+    <div class="stat-card"><span class="stat-icon">⚡</span><div class="stat-label">Habits This Week</div><div class="stat-value">87%</div><div class="stat-sub">↑ 12% improvement</div></div>
+    <div class="stat-card"><span class="stat-icon">💪</span><div class="stat-label">Workouts Logged</div><div class="stat-value">5/7</div><div class="stat-sub">On target</div></div>
+    <div class="stat-card"><span class="stat-icon">🏅</span><div class="stat-label">Points Earned</div><div class="stat-value">2,450</div><div class="stat-sub">↑ 340 this week</div></div>
+  </div>
+
+  <div class="grid-aside" style="margin-bottom:18px;">
+    <div class="score-card">
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;">Discipline Score</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Updated in real-time</div>
+      <div class="ring-wrap">
+        <svg class="score-svg" width="155" height="155" viewBox="0 0 160 160">
+          <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#6D28D9"/><stop offset="100%" style="stop-color:#A855F7"/></linearGradient></defs>
+          <circle class="ring-track" cx="80" cy="80" r="65"/>
+          <circle class="ring-fill" cx="80" cy="80" r="65"/>
+        </svg>
+        <div class="ring-center"><div class="ring-num">76</div><div class="ring-lbl">SCORE</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center;">
+        <span class="badge purple">🔥 On Fire</span><span class="badge green">✓ Consistent</span>
+      </div>
+      <div style="width:100%;">
+        <div class="breakdown-row"><span class="bd-label">Workouts</span><div class="bd-bar"><div class="bd-fill" style="width:85%"></div></div><span class="bd-val">85%</span></div>
+        <div class="breakdown-row"><span class="bd-label">Habits</span><div class="bd-bar"><div class="bd-fill" style="width:87%"></div></div><span class="bd-val">87%</span></div>
+        <div class="breakdown-row"><span class="bd-label">Streak</span><div class="bd-bar"><div class="bd-fill" style="width:70%"></div></div><span class="bd-val">70%</span></div>
+        <div class="breakdown-row"><span class="bd-label">Community</span><div class="bd-bar"><div class="bd-fill" style="width:60%"></div></div><span class="bd-val">60%</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Weekly Activity
+        <div style="display:flex;gap:6px;">
+          <button class="tab-btn active">Week</button>
+          <button class="tab-btn">Month</button>
+          <button class="tab-btn">3M</button>
+        </div>
+      </div>
+      <div class="mini-chart" id="dashChart"></div>
+      <div class="chart-lbl-row" id="dashLabels"></div>
+      <div style="margin-top:14px;padding:14px;background:var(--bg2);border-radius:10px;border-left:3px solid var(--green);">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">🤖 AI Prediction</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6;">At 87% consistency, you're projected to reach your fat loss goal in <strong style="color:var(--green);">11 weeks</strong> — 2 weeks ahead of schedule!</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+        <button class="btn-primary" onclick="navigate('workouts')">+ Log Workout</button>
+        <button class="btn-sm" style="justify-content:center;" onclick="navigate('photos')">📷 Upload Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:18px;">
+    <div class="card">
+      <div class="ai-badge-pill">🤖 AI Insight</div>
+      <div class="ai-msg">You stayed consistent for <strong>6 out of 7 days</strong> last week — that's your personal best this month!</div>
+      <div class="ai-tip-box">💡 <strong>This week's focus:</strong> Hit 7/7 days to unlock the "Unbreakable" badge and gain +8 Discipline Score points.</div>
+      <div style="margin-top:12px;"><button class="btn-primary" onclick="navigate('ai')">View Full AI Report →</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Habit Progress <button class="btn-sm" style="font-size:11px;" onclick="navigate('habits')">Manage →</button></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">💧 Water</span><div class="pbar"><div class="pbar-fill" style="width:90%"></div></div><span class="pbar-val">90%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">🏃 Steps</span><div class="pbar"><div class="pbar-fill" style="width:85%"></div></div><span class="pbar-val">85%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">😴 Sleep</span><div class="pbar"><div class="pbar-fill" style="width:71%"></div></div><span class="pbar-val">71%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">📖 Reading</span><div class="pbar"><div class="pbar-fill" style="width:57%"></div></div><span class="pbar-val">57%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">🧘 Meditate</span><div class="pbar"><div class="pbar-fill" style="width:43%"></div></div><span class="pbar-val">43%</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 30-Day Challenge — Leaderboard Preview <button class="btn-sm" onclick="navigate('leaderboard')">Full Board →</button></div>
+    <div class="lb-row"><span class="lb-rank g">1</span><div class="lb-av">AK</div><div class="lb-info"><div class="lb-name">Atcherboard</div><div class="lb-meta">🔥 21 streak</div></div><div class="lb-score">98</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:98%"></div></div></div></div>
+    <div class="lb-row"><span class="lb-rank s">2</span><div class="lb-av">FR</div><div class="lb-info"><div class="lb-name">Flexiguru</div><div class="lb-meta">🔥 19 streak</div></div><div class="lb-score">94</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:94%"></div></div></div></div>
+    <div class="lb-row me"><span class="lb-rank" style="color:var(--purple)">#7</span><div class="lb-av">AG</div><div class="lb-info"><div class="lb-name">Atchayam G. <span style="font-size:10px;color:var(--purple);font-weight:600;">← You</span></div><div class="lb-meta">🔥 14 streak</div></div><div class="lb-score">76</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:76%"></div></div></div></div>
+  </div>
+</div>
+
+<!-- ═════════════════════ HABITS ═════════════════════ -->
+<div class="page" id="page-habits">
+  <div class="page-title">✅ Habits</div>
+  <div class="page-subtitle">Track your daily habits — Sunday, March 1, 2026</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-label">Today Completed</div><div class="stat-value">4/7</div><div class="stat-sub">57% done today</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-label">This Week</div><div class="stat-value">87%</div><div class="stat-sub">Best week so far!</div></div>
+    <div class="stat-card"><span class="stat-icon">🔥</span><div class="stat-label">Best Streak</div><div class="stat-value">21d</div><div class="stat-sub">💧 Water intake</div></div>
+    <div class="stat-card"><span class="stat-icon">🏅</span><div class="stat-label">Points Today</div><div class="stat-value">+120</div><div class="stat-sub">80 more possible</div></div>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:15px;font-weight:700;color:var(--text);">Today's Habits</div>
+        <button class="btn-primary">+ Add Habit</button>
+      </div>
+      <div class="habit-list">
+        <div class="habit-row"><div class="habit-check done">✓</div><div class="habit-info"><div class="habit-name">💧 Drink 3L Water</div><div class="habit-meta">Daily · Morning</div></div><div style="text-align:right;"><div class="habit-streak">🔥 21d</div><div class="habit-pts">+20 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check done">✓</div><div class="habit-info"><div class="habit-name">🏃 10,000 Steps</div><div class="habit-meta">Daily · Anytime</div></div><div style="text-align:right;"><div class="habit-streak">🔥 14d</div><div class="habit-pts">+25 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check done">✓</div><div class="habit-info"><div class="habit-name">📖 Read 20 Minutes</div><div class="habit-meta">Daily · Evening</div></div><div style="text-align:right;"><div class="habit-streak">🔥 8d</div><div class="habit-pts">+15 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check done">✓</div><div class="habit-info"><div class="habit-name">😴 Sleep by 10:30 PM</div><div class="habit-meta">Daily · Night</div></div><div style="text-align:right;"><div class="habit-streak">🔥 5d</div><div class="habit-pts">+20 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check" style="border-color:var(--muted);">○</div><div class="habit-info"><div class="habit-name" style="color:var(--muted);">🧘 Meditate 10 min</div><div class="habit-meta">Daily · Morning</div></div><div style="text-align:right;"><div class="habit-streak" style="color:var(--muted);">3d</div><div class="habit-pts" style="color:var(--muted);">+15 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check" style="border-color:var(--muted);">○</div><div class="habit-info"><div class="habit-name" style="color:var(--muted);">🥗 Eat Clean Meals</div><div class="habit-meta">Daily · Mealtime</div></div><div style="text-align:right;"><div class="habit-streak" style="color:var(--muted);">1d</div><div class="habit-pts" style="color:var(--muted);">+15 pts</div></div></div>
+        <div class="habit-row"><div class="habit-check" style="border-color:var(--muted);">○</div><div class="habit-info"><div class="habit-name" style="color:var(--muted);">📝 Journal Entry</div><div class="habit-meta">Daily · Evening</div></div><div style="text-align:right;"><div class="habit-streak" style="color:var(--muted);">0d</div><div class="habit-pts" style="color:var(--muted);">+10 pts</div></div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="card">
+        <div class="card-title">Weekly Overview</div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Mon</span><div class="pbar"><div class="pbar-fill" style="width:100%"></div></div><span class="pbar-val">7/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Tue</span><div class="pbar"><div class="pbar-fill" style="width:86%"></div></div><span class="pbar-val">6/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Wed</span><div class="pbar"><div class="pbar-fill" style="width:100%"></div></div><span class="pbar-val">7/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Thu</span><div class="pbar"><div class="pbar-fill" style="width:71%"></div></div><span class="pbar-val">5/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Fri</span><div class="pbar"><div class="pbar-fill" style="width:100%"></div></div><span class="pbar-val">7/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Sat</span><div class="pbar"><div class="pbar-fill" style="width:86%"></div></div><span class="pbar-val">6/7</span></div>
+        <div class="pbar-wrap"><span class="pbar-lbl">Sun (Today)</span><div class="pbar"><div class="pbar-fill" style="width:57%"></div></div><span class="pbar-val">4/7</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Active Streaks 🔥</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">💧 Water Intake</span><span class="badge green">🔥 21 days</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">🏃 10K Steps</span><span class="badge purple">🔥 14 days</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">📖 Reading</span><span class="badge yellow">🔥 8 days</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">🧘 Meditation</span><span class="badge red">3 days</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ WORKOUTS ═════════════════════ -->
+<div class="page" id="page-workouts">
+  <div class="page-title">⚡ Workouts</div>
+  <div class="page-subtitle">Log and track your training sessions</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-icon">💪</span><div class="stat-label">This Week</div><div class="stat-value">5/7</div><div class="stat-sub">On track</div></div>
+    <div class="stat-card"><span class="stat-icon">⏱</span><div class="stat-label">Total Minutes</div><div class="stat-value">310</div><div class="stat-sub">↑ 42 more than last week</div></div>
+    <div class="stat-card"><span class="stat-icon">🔥</span><div class="stat-label">Calories Burned</div><div class="stat-value">2,840</div><div class="stat-sub">Avg 568 kcal/session</div></div>
+    <div class="stat-card"><span class="stat-icon">📅</span><div class="stat-label">This Month</div><div class="stat-value">19</div><div class="stat-sub">Total workouts</div></div>
+  </div>
+
+  <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+    <button class="btn-primary">+ Log New Workout</button>
+    <button class="btn-sm">📋 Templates</button>
+    <button class="btn-sm">📅 Schedule</button>
+  </div>
+
+  <div class="grid3">
+    <div class="workout-card">
+      <div class="wk-header"><div class="wk-icon">🏋️</div><div><div class="wk-title">Upper Body Strength</div><div class="wk-sub">Today · 6:30 AM</div></div></div>
+      <div><span class="wk-tag">Strength</span><span class="wk-tag">Chest</span><span class="wk-tag">Back</span></div>
+      <div class="wk-stats"><div class="wk-stat"><div class="wk-stat-val">65</div><div class="wk-stat-lbl">mins</div></div><div class="wk-stat"><div class="wk-stat-val">580</div><div class="wk-stat-lbl">kcal</div></div><div class="wk-stat"><div class="wk-stat-val">24</div><div class="wk-stat-lbl">sets</div></div></div>
+    </div>
+    <div class="workout-card">
+      <div class="wk-header"><div class="wk-icon">🏃</div><div><div class="wk-title">Morning Run</div><div class="wk-sub">Fri, Feb 28 · 5:30 AM</div></div></div>
+      <div><span class="wk-tag">Cardio</span><span class="wk-tag">Outdoors</span></div>
+      <div class="wk-stats"><div class="wk-stat"><div class="wk-stat-val">45</div><div class="wk-stat-lbl">mins</div></div><div class="wk-stat"><div class="wk-stat-val">490</div><div class="wk-stat-lbl">kcal</div></div><div class="wk-stat"><div class="wk-stat-val">6.2</div><div class="wk-stat-lbl">km</div></div></div>
+    </div>
+    <div class="workout-card">
+      <div class="wk-header"><div class="wk-icon">🦵</div><div><div class="wk-title">Leg Day</div><div class="wk-sub">Thu, Feb 27 · 7:00 AM</div></div></div>
+      <div><span class="wk-tag">Strength</span><span class="wk-tag">Legs</span></div>
+      <div class="wk-stats"><div class="wk-stat"><div class="wk-stat-val">60</div><div class="wk-stat-lbl">mins</div></div><div class="wk-stat"><div class="wk-stat-val">620</div><div class="wk-stat-lbl">kcal</div></div><div class="wk-stat"><div class="wk-stat-val">28</div><div class="wk-stat-lbl">sets</div></div></div>
+    </div>
+    <div class="workout-card">
+      <div class="wk-header"><div class="wk-icon">🧘</div><div><div class="wk-title">Yoga & Stretching</div><div class="wk-sub">Wed, Feb 26 · 7:30 AM</div></div></div>
+      <div><span class="wk-tag">Flexibility</span><span class="wk-tag">Recovery</span></div>
+      <div class="wk-stats"><div class="wk-stat"><div class="wk-stat-val">40</div><div class="wk-stat-lbl">mins</div></div><div class="wk-stat"><div class="wk-stat-val">180</div><div class="wk-stat-lbl">kcal</div></div><div class="wk-stat"><div class="wk-stat-val">Low</div><div class="wk-stat-lbl">intensity</div></div></div>
+    </div>
+    <div class="workout-card">
+      <div class="wk-header"><div class="wk-icon">🚴</div><div><div class="wk-title">Cycling Session</div><div class="wk-sub">Tue, Feb 25 · 6:00 AM</div></div></div>
+      <div><span class="wk-tag">Cardio</span><span class="wk-tag">Endurance</span></div>
+      <div class="wk-stats"><div class="wk-stat"><div class="wk-stat-val">50</div><div class="wk-stat-lbl">mins</div></div><div class="wk-stat"><div class="wk-stat-val">520</div><div class="wk-stat-lbl">kcal</div></div><div class="wk-stat"><div class="wk-stat-val">22</div><div class="wk-stat-lbl">km</div></div></div>
+    </div>
+    <div class="workout-card" style="border:2px dashed var(--border);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:160px;" onclick="alert('Log workout feature coming soon!')">
+      <div style="text-align:center;color:var(--muted);"><div style="font-size:32px;margin-bottom:8px;">+</div><div style="font-size:13px;font-weight:600;">Log Today's Workout</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ PROGRESS PHOTOS ═════════════════════ -->
+<div class="page" id="page-photos">
+  <div class="page-title">📷 Progress Photos</div>
+  <div class="page-subtitle">Visual proof of your discipline — track your transformation</div>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-title">Before vs After Comparison <button class="btn-sm">🔄 Change</button></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Compare your transformation side by side</div>
+    <div class="compare-pair">
+      <div><div class="compare-img">🧍</div><div class="compare-label">📅 Jan 1, 2026 · 82.0 kg — Start</div></div>
+      <div><div class="compare-img" style="background:linear-gradient(135deg,var(--purple2),var(--accent));">💪</div><div class="compare-label">📅 Mar 1, 2026 · 77.5 kg — Week 9</div></div>
+    </div>
+    <div style="margin-top:14px;padding:12px;background:var(--bg2);border-radius:10px;border-left:3px solid var(--green);">
+      <span style="font-size:13px;color:var(--text);">🤖 <strong>AI Analysis:</strong> <span style="color:var(--green);">Visible reduction in body fat.</span> Estimated −4.5 kg in 9 weeks. Shoulder definition improved. You're on track for your goal!</span>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+    <div style="font-size:15px;font-weight:700;color:var(--text);">All Progress Photos</div>
+    <button class="btn-primary">+ Upload Photo</button>
+  </div>
+  <div class="photo-grid">
+    <div class="photo-card"><div class="photo-thumb">🧍</div><div class="photo-info"><div class="photo-date">January 1, 2026</div><div class="photo-weight">82.0 kg · Start</div><div style="margin-top:6px;"><span class="badge yellow">Before</span></div></div></div>
+    <div class="photo-card"><div class="photo-thumb" style="background:linear-gradient(135deg,#2D1B5E,#3B1F78);">🧍‍♂️</div><div class="photo-info"><div class="photo-date">January 22, 2026</div><div class="photo-weight">80.2 kg · Week 3</div><div style="margin-top:6px;"><span class="badge purple">−1.8 kg</span></div></div></div>
+    <div class="photo-card"><div class="photo-thumb" style="background:linear-gradient(135deg,#4C1D95,#6D28D9);">🏃</div><div class="photo-info"><div class="photo-date">February 8, 2026</div><div class="photo-weight">79.0 kg · Week 5</div><div style="margin-top:6px;"><span class="badge purple">−3.0 kg</span></div></div></div>
+    <div class="photo-card"><div class="photo-thumb" style="background:linear-gradient(135deg,var(--purple2),var(--accent));">💪</div><div class="photo-info"><div class="photo-date">March 1, 2026</div><div class="photo-weight">77.5 kg · Week 9</div><div style="margin-top:6px;"><span class="badge green">−4.5 kg ✓</span></div></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Weight Trend</div>
+    <div class="bar-chart">
+      <div style="flex:1;"><div class="bcbar" style="height:100%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.7;"></div><div class="bcbar-lbl">Jan 1<br><small>82kg</small></div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:95%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.8;"></div><div class="bcbar-lbl">Jan 15<br><small>81kg</small></div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:88%;background:linear-gradient(180deg,var(--accent),var(--purple2));"></div><div class="bcbar-lbl">Feb 1<br><small>80.2</small></div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:82%;background:linear-gradient(180deg,var(--accent),var(--purple2));"></div><div class="bcbar-lbl">Feb 15<br><small>79kg</small></div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:76%;background:linear-gradient(180deg,var(--green),#059669);"></div><div class="bcbar-lbl">Mar 1<br><small style="color:var(--green);">77.5</small></div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:8px;">
+      <span>Start: 82.0 kg</span><span style="color:var(--green);font-weight:700;">Current: 77.5 kg (−4.5 kg)</span><span>Goal: 72 kg</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ COMMUNITY ═════════════════════ -->
+<div class="page" id="page-community">
+  <div class="page-title">👥 Community Feed</div>
+  <div class="page-subtitle">Stay accountable with your discipline tribe</div>
+
+  <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:center;">
+    <button class="btn-primary">+ Share Update</button>
+    <button class="tab-btn active">All Posts</button>
+    <button class="tab-btn">Friends</button>
+    <button class="tab-btn">Trending</button>
+  </div>
+
+  <div class="grid3">
+    <div class="feed-card"><div class="feed-img-thumb">💪</div><div class="feed-body"><div class="feed-user"><div class="feed-av">RK</div><span class="feed-name">Ramesh K.</span><span class="feed-badge2">🔥 28d</span></div><div class="feed-text">Week 4 transformation! Down 4kg and feeling stronger. The Discipline Score keeps me accountable daily. 76 → 91 in 4 weeks!</div><div class="feed-actions"><button class="feed-btn">❤️ 128</button><button class="feed-btn">💬 24</button><button class="feed-btn">🔁 Share</button></div></div></div>
+    <div class="feed-card"><div class="feed-img-thumb">🏃</div><div class="feed-body"><div class="feed-user"><div class="feed-av">PS</div><span class="feed-name">Priya S.</span><span class="feed-badge2">Score: 89</span></div><div class="feed-text">Morning run done! 5km at 5:30am. The AI suggested morning workouts and the difference is incredible. 21 days consistent! 🌅</div><div class="feed-actions"><button class="feed-btn">❤️ 95</button><button class="feed-btn">💬 18</button><button class="feed-btn">🔁 Share</button></div></div></div>
+    <div class="feed-card"><div class="feed-img-thumb">🎯</div><div class="feed-body"><div class="feed-user"><div class="feed-av">MV</div><span class="feed-name">Mohan V.</span><span class="feed-badge2">🏆 Top 10</span></div><div class="feed-text">Hit a 90 Discipline Score for the first time! 3 months of consistent effort. If I can do it, anyone can. 💜</div><div class="feed-actions"><button class="feed-btn">❤️ 213</button><button class="feed-btn">💬 47</button><button class="feed-btn">🔁 Share</button></div></div></div>
+    <div class="feed-card"><div class="feed-img-thumb">🥗</div><div class="feed-body"><div class="feed-user"><div class="feed-av">SN</div><span class="feed-name">Sneha N.</span><span class="feed-badge2">🌱 Week 2</span></div><div class="feed-text">Day 14 of clean eating! Prepped meals for the whole week. Small steps every day lead to big results. 🥦</div><div class="feed-actions"><button class="feed-btn">❤️ 67</button><button class="feed-btn">💬 12</button><button class="feed-btn">🔁 Share</button></div></div></div>
+    <div class="feed-card"><div class="feed-img-thumb">🏋️</div><div class="feed-body"><div class="feed-user"><div class="feed-av">AJ</div><span class="feed-name">Arjun J.</span><span class="feed-badge2">Score: 82</span></div><div class="feed-text">New personal best! Bench pressed 100kg for the first time. 6 months of consistent training pays off. 💪</div><div class="feed-actions"><button class="feed-btn">❤️ 184</button><button class="feed-btn">💬 36</button><button class="feed-btn">🔁 Share</button></div></div></div>
+    <div class="feed-card"><div class="feed-img-thumb">🧘</div><div class="feed-body"><div class="feed-user"><div class="feed-av">KR</div><span class="feed-name">Kavya R.</span><span class="feed-badge2">🔥 10d</span></div><div class="feed-text">10-day meditation streak! Starting every morning with 15 mins of mindfulness transformed my discipline. Score 52 → 71! 🙏</div><div class="feed-actions"><button class="feed-btn">❤️ 89</button><button class="feed-btn">💬 21</button><button class="feed-btn">🔁 Share</button></div></div></div>
+  </div>
+</div>
+
+<!-- ═════════════════════ CHALLENGES ═════════════════════ -->
+<div class="page" id="page-challenges">
+  <div class="page-title">🏆 Challenges</div>
+  <div class="page-subtitle">Push your limits with community challenges</div>
+
+  <div class="challenge-hero">
+    <div class="ch-title">30-Day Discipline Challenge</div>
+    <div class="ch-sub">You're on Day 14 of 30 — halfway there! Don't break the chain. 🔥</div>
+    <div class="ch-stats">
+      <div><div class="ch-stat-val">320</div><div class="ch-stat-lbl">Participants</div></div>
+      <div><div class="ch-stat-val">Day 14</div><div class="ch-stat-lbl">Your Progress</div></div>
+      <div><div class="ch-stat-val">#7</div><div class="ch-stat-lbl">Your Rank</div></div>
+      <div><div class="ch-stat-val">16d</div><div class="ch-stat-lbl">Remaining</div></div>
+    </div>
+  </div>
+
+  <div class="grid3" style="margin-bottom:18px;">
+    <div class="challenge-card-sm">
+      <div class="ch-badge-pill active">● Active — Day 14/30</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">🔥 30-Day Discipline</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Complete all 7 daily habits for 30 days straight. Minimum score 70 each day.</div>
+      <div class="pbar-wrap"><span class="pbar-lbl">Progress</span><div class="pbar"><div class="pbar-fill" style="width:47%"></div></div><span class="pbar-val">14/30</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">🏅 Prize: Gold Badge · 👥 320 joined</div>
+    </div>
+    <div class="challenge-card-sm">
+      <div class="ch-badge-pill upcoming">◎ Upcoming</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">💪 Fat Loss Sprint</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">6-week challenge. Log all workouts + track nutrition. Largest % body fat loss wins.</div>
+      <div style="font-size:12px;color:var(--yellow);font-weight:600;margin-bottom:12px;">Starts April 1, 2026</div>
+      <button class="btn-primary" style="width:100%;justify-content:center;">Pre-Register →</button>
+    </div>
+    <div class="challenge-card-sm">
+      <div class="ch-badge-pill upcoming">◎ Open</div>
+      <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;">🏢 Corporate Wellness</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Team-based challenge. Build your company's collective Discipline Score together.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">8 companies competing</div>
+      <button class="btn-sm" style="width:100%;justify-content:center;">Invite Your Team →</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 30-Day Challenge — Top Rankings</div>
+    <div class="lb-row"><span class="lb-rank g">1</span><div class="lb-av">AK</div><div class="lb-info"><div class="lb-name">Atcherboard</div><div class="lb-meta">🔥 21 streak · All habits complete</div></div><div class="lb-score">98</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:98%"></div></div></div></div>
+    <div class="lb-row"><span class="lb-rank s">2</span><div class="lb-av">FR</div><div class="lb-info"><div class="lb-name">Flexiguru</div><div class="lb-meta">🔥 19 streak</div></div><div class="lb-score">94</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:94%"></div></div></div></div>
+    <div class="lb-row"><span class="lb-rank b">3</span><div class="lb-av">RK</div><div class="lb-info"><div class="lb-name">Ramesh K.</div><div class="lb-meta">🔥 16 streak</div></div><div class="lb-score">91</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:91%"></div></div></div></div>
+    <div class="lb-row"><span class="lb-rank">4</span><div class="lb-av">PS</div><div class="lb-info"><div class="lb-name">Priya S.</div><div class="lb-meta">🔥 14 streak</div></div><div class="lb-score">89</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:89%"></div></div></div></div>
+    <div class="lb-row"><span class="lb-rank">5</span><div class="lb-av">MV</div><div class="lb-info"><div class="lb-name">Mohan V.</div><div class="lb-meta">🔥 12 streak</div></div><div class="lb-score">87</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:87%"></div></div></div></div>
+    <div style="text-align:center;padding:8px;color:var(--muted);font-size:12px;">· · ·</div>
+    <div class="lb-row me"><span class="lb-rank" style="color:var(--purple)">#7</span><div class="lb-av">AG</div><div class="lb-info"><div class="lb-name">Atchayam G. <span style="font-size:10px;color:var(--purple);font-weight:700;">← You</span></div><div class="lb-meta">🔥 14 streak · +2 since yesterday</div></div><div class="lb-score">76</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:76%"></div></div></div></div>
+  </div>
+</div>
+
+<!-- ═════════════════════ LEADERBOARD ═════════════════════ -->
+<div class="page" id="page-leaderboard">
+  <div class="page-title">📊 Global Leaderboard</div>
+  <div class="page-subtitle">How do you rank among all DISCIPL.AI users?</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-icon">🌍</span><div class="stat-label">Global Rank</div><div class="stat-value">#247</div><div class="stat-sub">Top 5% of all users</div></div>
+    <div class="stat-card"><span class="stat-icon">🏆</span><div class="stat-label">Challenge Rank</div><div class="stat-value">#7</div><div class="stat-sub">30-Day Challenge</div></div>
+    <div class="stat-card"><span class="stat-icon">⭐</span><div class="stat-label">Discipline Score</div><div class="stat-value">76</div><div class="stat-sub">↑ 4 pts this week</div></div>
+    <div class="stat-card"><span class="stat-icon">🎯</span><div class="stat-label">Total Points</div><div class="stat-value">12,450</div><div class="stat-sub">Season total</div></div>
+  </div>
+
+  <div class="grid2" style="margin-bottom:16px;">
+    <div class="card">
+      <div class="card-title">🌍 Global — All Users</div>
+      <div class="lb-row"><span class="lb-rank g">1</span><div class="lb-av">VK</div><div class="lb-info"><div class="lb-name">VikramFit</div><div class="lb-meta">🔥 60d streak</div></div><div class="lb-score">99</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:99%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank s">2</span><div class="lb-av">AK</div><div class="lb-info"><div class="lb-name">Atcherboard</div><div class="lb-meta">🔥 21d streak</div></div><div class="lb-score">98</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:98%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank b">3</span><div class="lb-av">SM</div><div class="lb-info"><div class="lb-name">SahilMax</div><div class="lb-meta">🔥 45d streak</div></div><div class="lb-score">97</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:97%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank">4</span><div class="lb-av">DP</div><div class="lb-info"><div class="lb-name">DisciplinePro</div><div class="lb-meta">🔥 38d streak</div></div><div class="lb-score">95</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:95%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank">5</span><div class="lb-av">FR</div><div class="lb-info"><div class="lb-name">Flexiguru</div><div class="lb-meta">🔥 19d streak</div></div><div class="lb-score">94</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:94%"></div></div></div></div>
+      <div style="text-align:center;padding:8px;color:var(--muted);font-size:12px;">· · · (242 more users) · · ·</div>
+      <div class="lb-row me"><span class="lb-rank" style="color:var(--purple)">#247</span><div class="lb-av">AG</div><div class="lb-info"><div class="lb-name">Atchayam G. <span style="font-size:10px;color:var(--purple);font-weight:700;">← You</span></div><div class="lb-meta">🔥 14d streak · Top 5%</div></div><div class="lb-score">76</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:76%"></div></div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 Friends Leaderboard</div>
+      <div class="lb-row"><span class="lb-rank g">1</span><div class="lb-av">RK</div><div class="lb-info"><div class="lb-name">Ramesh K.</div><div class="lb-meta">🔥 16d streak</div></div><div class="lb-score">91</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:91%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank s">2</span><div class="lb-av">SN</div><div class="lb-info"><div class="lb-name">Sneha N.</div><div class="lb-meta">🔥 9d streak</div></div><div class="lb-score">79</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:79%"></div></div></div></div>
+      <div class="lb-row me"><span class="lb-rank b" style="color:var(--purple)">3</span><div class="lb-av">AG</div><div class="lb-info"><div class="lb-name">Atchayam G. <span style="font-size:10px;color:var(--purple);font-weight:700;">← You</span></div><div class="lb-meta">🔥 14d streak</div></div><div class="lb-score">76</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:76%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank">4</span><div class="lb-av">AJ</div><div class="lb-info"><div class="lb-name">Arjun J.</div><div class="lb-meta">🔥 7d streak</div></div><div class="lb-score">71</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:71%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank">5</span><div class="lb-av">KR</div><div class="lb-info"><div class="lb-name">Kavya R.</div><div class="lb-meta">🔥 10d streak</div></div><div class="lb-score">68</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:68%"></div></div></div></div>
+      <div class="lb-row"><span class="lb-rank">6</span><div class="lb-av">VR</div><div class="lb-info"><div class="lb-name">Vikram R.</div><div class="lb-meta">🔥 4d streak</div></div><div class="lb-score">55</div><div class="lb-bar-wrap"><div class="lb-bar"><div class="lb-fill" style="width:55%"></div></div></div></div>
+      <div style="margin-top:12px;"><button class="btn-sm" style="width:100%;justify-content:center;">+ Invite Friends</button></div>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;padding:24px;">
+    <div style="font-size:32px;margin-bottom:8px;">🏅</div>
+    <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;">Your Earned Badges</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Earned through consistency and engagement</div>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+      <span class="badge green">🔥 14-Day Streak</span>
+      <span class="badge purple">💪 5 Workouts/Week</span>
+      <span class="badge yellow">⭐ Top 250 Global</span>
+      <span class="badge green">✅ Week Perfectionist</span>
+      <span class="badge purple">🤖 AI Follower</span>
+      <span class="badge red" style="opacity:.4;">🏆 30-Day Champion (locked)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ AI INSIGHTS ═════════════════════ -->
+<div class="page" id="page-ai">
+  <div class="page-title">🤖 AI Insights</div>
+  <div class="page-subtitle">Your personal AI coach — powered by behavioral analysis</div>
+
+  <div class="ai-card">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--purple2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🤖</div>
+      <div><div style="font-size:15px;font-weight:700;color:var(--text);">Weekly Performance Report — Week 9</div><div style="font-size:11px;color:var(--muted);">Generated Sunday, March 1, 2026 · Based on 7 days of behavioral data</div></div>
+    </div>
+    <div class="ai-badge-pill">🤖 AI Analysis</div>
+    <div class="ai-msg">This was your <strong>strongest week yet.</strong> You achieved 87% habit completion rate — a 12% improvement over Week 8. Your Discipline Score climbed from 72 to 76, placing you in the <strong>Top 5% globally.</strong> Workout consistency (5/7) is excellent. The main opportunity is your morning meditation habit at 43% completion.</div>
+    <div class="ai-tip-box">💡 <strong>AI Recommendation for Week 10:</strong> Set your meditation alarm 15 minutes earlier at 6:15 AM. Users who complete their first habit before 7 AM are 3x more likely to complete all habits that day.</div>
+  </div>
+
+  <div class="grid2">
+    <div class="ai-card">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;">📊 Behavioral Metrics — Week 9</div>
+      <div class="insight-metric"><span class="im-label">Habit Completion Rate</span><span class="im-val">87% ↑</span></div>
+      <div class="insight-metric"><span class="im-label">Workout Consistency</span><span class="im-val">71% ↑</span></div>
+      <div class="insight-metric"><span class="im-label">Sleep Quality Score</span><span class="im-val">74%</span></div>
+      <div class="insight-metric"><span class="im-label">Hydration Adherence</span><span class="im-val">90% ↑</span></div>
+      <div class="insight-metric"><span class="im-label">Community Engagement</span><span class="im-val">60%</span></div>
+      <div class="insight-metric"><span class="im-label">Discipline Score Change</span><span class="im-val" style="color:var(--green);">+4 pts ✓</span></div>
+    </div>
+    <div class="ai-card">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;">🎯 Fat Loss Prediction</div>
+      <div class="pred-box">
+        <div class="pred-row"><span style="font-size:12px;color:var(--muted);">Current Weight</span><span style="font-size:14px;font-weight:700;color:var(--text);">77.5 kg</span></div>
+        <div class="pred-row"><span style="font-size:12px;color:var(--muted);">Goal Weight</span><span style="font-size:14px;font-weight:700;color:var(--text);">72.0 kg</span></div>
+        <div class="pred-row"><span style="font-size:12px;color:var(--muted);">Projected Completion</span><span style="font-size:14px;font-weight:700;color:var(--green);">~May 15, 2026</span></div>
+        <div class="pred-row"><span style="font-size:12px;color:var(--muted);">Weekly Loss Rate</span><span style="font-size:14px;font-weight:700;color:var(--accent);">~0.5 kg/week</span></div>
+        <div class="pred-row"><span style="font-size:12px;color:var(--muted);">Ahead of Schedule</span><span style="font-size:14px;font-weight:700;color:var(--green);">+2 weeks ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-card">
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;">⚡ Pattern Analysis & Smart Alerts</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:rgba(16,185,129,.08);border:1px solid var(--green);border-radius:10px;"><span style="font-size:20px;flex-shrink:0;">✅</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Morning workout advantage detected</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">You complete 94% of all habits on days you work out before 8 AM vs 61% on other days.</div></div></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:rgba(245,158,11,.08);border:1px solid var(--yellow);border-radius:10px;"><span style="font-size:20px;flex-shrink:0;">⚠️</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Thursday dip pattern</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Your habit completion drops 23% every Thursday. Consider a lighter day or accountability check-in.</div></div></div>
+      <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:rgba(139,92,246,.08);border:1px solid var(--purple);border-radius:10px;"><span style="font-size:20px;flex-shrink:0;">🤖</span><div><div style="font-size:13px;font-weight:600;color:var(--text);">Community engagement boosts score</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Weeks with 2+ community posts show an average 8-point higher Discipline Score. Post more!</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ ANALYTICS ═════════════════════ -->
+<div class="page" id="page-analytics">
+  <div class="page-title">📈 Analytics</div>
+  <div class="page-subtitle">Deep dive into your performance data</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-icon">📈</span><div class="stat-label">Discipline Score</div><div class="stat-value">76</div><div class="stat-sub">↑ 18pts in 9 weeks</div></div>
+    <div class="stat-card"><span class="stat-icon">✅</span><div class="stat-label">Total Habits Done</div><div class="stat-value">483</div><div class="stat-sub">Since Jan 1, 2026</div></div>
+    <div class="stat-card"><span class="stat-icon">💪</span><div class="stat-label">Workouts</div><div class="stat-value">38</div><div class="stat-sub">9-week total</div></div>
+    <div class="stat-card"><span class="stat-icon">🏅</span><div class="stat-label">Total Points</div><div class="stat-value">12,450</div><div class="stat-sub">All-time</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">Discipline Score — 9 Week Trend
+      <div style="display:flex;gap:6px;">
+        <button class="tab-btn active">Score</button>
+        <button class="tab-btn">Habits</button>
+        <button class="tab-btn">Weight</button>
+      </div>
+    </div>
+    <div class="bar-chart">
+      <div style="flex:1;"><div class="bcbar" style="height:58%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.7;"></div><div class="bcbar-lbl">W1<br>58</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:62%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.75;"></div><div class="bcbar-lbl">W2<br>62</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:63%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.8;"></div><div class="bcbar-lbl">W3<br>63</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:66%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.85;"></div><div class="bcbar-lbl">W4<br>66</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:69%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.88;"></div><div class="bcbar-lbl">W5<br>69</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:70%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.9;"></div><div class="bcbar-lbl">W6<br>70</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:72%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.92;"></div><div class="bcbar-lbl">W7<br>72</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:72%;background:linear-gradient(180deg,var(--accent),var(--purple2));opacity:.95;"></div><div class="bcbar-lbl">W8<br>72</div></div>
+      <div style="flex:1;"><div class="bcbar" style="height:76%;background:linear-gradient(180deg,var(--green),#059669);"></div><div class="bcbar-lbl" style="color:var(--green);font-weight:700;">W9<br>76✓</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);">Avg improvement: +2.0 pts/week · Projected Week 20 score: <strong style="color:var(--green);">~94</strong></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Habit Completion by Category</div>
+      <div class="pbar-wrap"><span class="pbar-lbl">💧 Hydration</span><div class="pbar"><div class="pbar-fill" style="width:90%"></div></div><span class="pbar-val">90%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">🏃 Movement</span><div class="pbar"><div class="pbar-fill" style="width:85%"></div></div><span class="pbar-val">85%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">😴 Sleep</span><div class="pbar"><div class="pbar-fill" style="width:71%"></div></div><span class="pbar-val">71%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">📖 Learning</span><div class="pbar"><div class="pbar-fill" style="width:57%"></div></div><span class="pbar-val">57%</span></div>
+      <div class="pbar-wrap"><span class="pbar-lbl">🧘 Mindfulness</span><div class="pbar"><div class="pbar-fill" style="width:43%"></div></div><span class="pbar-val">43%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Workout Type Breakdown</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">💪 Strength Training</span><span style="font-size:14px;font-weight:700;color:var(--purple);">18 sessions</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">🏃 Cardio / Running</span><span style="font-size:14px;font-weight:700;color:var(--purple);">12 sessions</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">🧘 Yoga / Flexibility</span><span style="font-size:14px;font-weight:700;color:var(--purple);">6 sessions</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--bg2);border-radius:8px;"><span style="font-size:13px;color:var(--text);">🚴 Cycling</span><span style="font-size:14px;font-weight:700;color:var(--purple);">2 sessions</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════ SETTINGS ═════════════════════ -->
+<div class="page" id="page-settings">
+  <div class="page-title">⚙ Settings</div>
+  <div class="page-subtitle">Customize your DISCIPL.AI experience</div>
+
+  <!-- Profile -->
+  <div class="settings-section">
+    <div class="settings-section-title">👤 Profile</div>
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">
+      <div class="profile-av-lg">AG</div>
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--text);">Atchayam G.</div>
+        <div style="font-size:13px;color:var(--muted);">@atchayam · Member since Jan 1, 2026</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;"><span class="badge green">⭐ Premium</span><span class="badge purple">🔥 14 Streak</span><span class="badge yellow">Top 5%</span></div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="form-row"><div class="input-label">Full Name</div><input class="input-field" value="Atchayam G."/></div>
+      <div class="form-row"><div class="input-label">Username</div><input class="input-field" value="@atchayam"/></div>
+    </div>
+    <div class="form-row"><div class="input-label">Bio</div><input class="input-field" value="Building discipline, one day at a time. 💜"/></div>
+    <div class="grid2">
+      <div class="form-row"><div class="input-label">Primary Goal</div><input class="input-field" value="Fat Loss + Muscle Gain"/></div>
+      <div class="form-row"><div class="input-label">Target Weight</div><input class="input-field" value="72 kg"/></div>
+    </div>
+    <button class="btn-primary">Save Profile</button>
+  </div>
+
+  <!-- Appearance -->
+  <div class="settings-section">
+    <div class="settings-section-title">🎨 Appearance</div>
+    <div class="setting-row">
+      <div><div class="setting-label">App Theme</div><div class="setting-sub">Switch between dark and light mode</div></div>
+    </div>
+    <div class="theme-picker">
+      <div class="theme-opt selected" id="darkOpt" onclick="setTheme('dark')">🌙 Dark Mode</div>
+      <div class="theme-opt" id="lightOpt" onclick="setTheme('light')">☀️ Light Mode</div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="settings-section">
+    <div class="settings-section-title">🔔 Notifications</div>
+    <div class="setting-row"><div><div class="setting-label">Daily Habit Reminders</div><div class="setting-sub">Get reminded to complete your habits at 8 AM</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Streak Alerts</div><div class="setting-sub">Alert me if I'm about to break my streak</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">AI Weekly Report</div><div class="setting-sub">Receive Sunday AI performance digest</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Challenge Updates</div><div class="setting-sub">Leaderboard changes and milestone alerts</div></div><div class="toggle-track" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Community Interactions</div><div class="setting-sub">Likes and comments on your posts</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+  </div>
+
+  <!-- Privacy -->
+  <div class="settings-section">
+    <div class="settings-section-title">🔒 Privacy</div>
+    <div class="setting-row"><div><div class="setting-label">Public Profile</div><div class="setting-sub">Let other users see your Discipline Score</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Show on Leaderboard</div><div class="setting-sub">Appear in global and challenge leaderboards</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Allow Challenge Invites</div><div class="setting-sub">Let others invite you to challenges</div></div><div class="toggle-track" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div class="setting-row"><div><div class="setting-label">Anonymous AI Data Sharing</div><div class="setting-sub">Share anonymized data to improve predictions</div></div><div class="toggle-track on" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+  </div>
+
+  <!-- Subscription -->
+  <div class="settings-section">
+    <div class="settings-section-title">⭐ Subscription</div>
+    <div class="plan-card active-plan">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div><div style="font-size:15px;font-weight:700;color:var(--text);">Premium Plan ⭐</div><div style="font-size:22px;font-weight:800;color:var(--purple);">₹499<span style="font-size:13px;font-weight:400;color:var(--muted);">/month</span></div></div>
+        <span class="badge green">Active</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.8;">✓ Advanced AI analytics · ✓ Fat loss prediction · ✓ Unlimited uploads · ✓ Deep performance reports · ✓ Priority AI support</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;">Renews April 1, 2026 · Auto-renewal ON</div>
+    </div>
+    <div class="plan-card">
+      <div style="font-size:15px;font-weight:700;color:var(--muted);">Free Plan</div>
+      <div style="font-size:20px;font-weight:800;color:var(--muted);">₹0<span style="font-size:13px;font-weight:400;">/month</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.8;">Basic tracking · Limited AI feedback · 5 photo uploads/month · Basic community access</div>
+    </div>
+    <button class="btn-sm" style="margin-top:4px;color:var(--red);border-color:var(--red);">Cancel Subscription</button>
+  </div>
+
+  <!-- Account -->
+  <div class="settings-section">
+    <div class="settings-section-title">🛡 Account</div>
+    <div class="setting-row"><div><div class="setting-label">Email Address</div><div class="setting-sub">atchayam@email.com</div></div><button class="btn-sm">Change</button></div>
+    <div class="setting-row"><div><div class="setting-label">Password</div><div class="setting-sub">Last changed 30 days ago</div></div><button class="btn-sm">Update</button></div>
+    <div class="setting-row"><div><div class="setting-label">Two-Factor Authentication</div><div class="setting-sub">Extra security for your account</div></div><div class="toggle-track" onclick="toggleSetting(this)"><div class="toggle-thumb"></div></div></div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn-sm">📤 Export My Data</button>
+      <button class="btn-sm" style="color:var(--red);border-color:var(--red);">🗑 Delete Account</button>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+// ═══ NAVIGATION ═══
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.page === page);
+  });
+
+  ['dashboard','challenges','analytics','community'].forEach(id => {
+    const el = document.getElementById('nl-' + id);
+    if (el) el.classList.toggle('active', id === page);
+  });
+
+  if (window.innerWidth < 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+
+  document.getElementById('mainArea').scrollTop = 0;
+
+  if (page === 'dashboard') renderDashChart();
+}
+
+// ═══ DASHBOARD CHART ═══
+function renderDashChart() {
+  const chartEl = document.getElementById('dashChart');
+  const labelsEl = document.getElementById('dashLabels');
+  if (!chartEl || !labelsEl) return;
+  chartEl.innerHTML = '';
+  labelsEl.innerHTML = '';
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals = [65, 80, 45, 90, 75, 88, 60];
+  const maxV = Math.max(...vals);
+  days.forEach((d, i) => {
+    const pct = Math.round((vals[i] / maxV) * 100);
+    const bar = document.createElement('div');
+    bar.className = 'mbar' + (i === 5 ? ' hi' : '');
+    bar.style.height = pct + '%';
+    bar.title = d + ': ' + vals[i] + ' pts';
+    chartEl.appendChild(bar);
+    const lbl = document.createElement('div');
+    lbl.className = 'chart-lbl';
+    lbl.textContent = d.slice(0,1);
+    labelsEl.appendChild(lbl);
+  });
+}
+
+// ═══ THEME ═══
+function setTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const d = document.getElementById('darkOpt');
+  const l = document.getElementById('lightOpt');
+  if (d) d.classList.toggle('selected', theme === 'dark');
+  if (l) l.classList.toggle('selected', theme === 'light');
+}
+
+// ═══ TOGGLES ═══
+function toggleSetting(el) { el.classList.toggle('on'); }
+
+// ═══ MOBILE SIDEBAR ═══
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+document.getElementById('mainArea').addEventListener('click', () => {
+  if (window.innerWidth < 768) {
+    document.getElementById('sidebar').classList.remove('open');
+  }
+});
+
+// ═══ TAB BUTTONS (visual only) ═══
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('tab-btn')) {
+    const parent = e.target.closest('.card-title') || e.target.parentElement;
+    parent.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+  }
+});
+
+// ═══ INIT ═══
+renderDashChart();
+</script>
+</body>
+</html>

@@ -1,0 +1,1273 @@
+{
+  "user": {
+    "id": "user_001",
+    "name": "Atchayam G.",
+    "username": "atchayam",
+    "email": "atchayam@example.com",
+    "bio": "Building discipline one day at a time 💪",
+    "goal": "Lose 10kg by June 2026",
+    "currentWeight": 77.5,
+    "targetWeight": 72.0,
+    "avatarInitials": "AG",
+    "memberSince": "2026-01-01",
+    "isPremium": true,
+    "disciplineScore": 76,
+    "currentStreak": 14,
+    "totalPoints": 12450,
+    "globalRank": 247
+  },
+  "dashboard": {
+    "stats": {
+      "currentStreak": 14,
+      "habitsThisWeek": 87,
+      "workoutsLogged": 5,
+      "workoutsTarget": 7,
+      "pointsEarned": 2450,
+      "pointsThisWeek": 340
+    },
+    "disciplineScore": {
+      "score": 76,
+      "breakdown": {
+        "workouts": 85,
+        "habits": 87,
+        "streak": 70,
+        "community": 60
+      }
+    },
+    "weeklyActivity": [
+      {
+        "day": "Mon",
+        "value": 95
+      },
+      {
+        "day": "Tue",
+        "value": 80
+      },
+      {
+        "day": "Wed",
+        "value": 100
+      },
+      {
+        "day": "Thu",
+        "value": 65
+      },
+      {
+        "day": "Fri",
+        "value": 90
+      },
+      {
+        "day": "Sat",
+        "value": 75
+      },
+      {
+        "day": "Sun",
+        "value": 57
+      }
+    ],
+    "aiPrediction": "At 87% consistency, you're projected to reach your fat loss goal in 11 weeks — 2 weeks ahead of schedule!",
+    "habitProgress": [
+      {
+        "name": "💧 Water",
+        "value": 90
+      },
+      {
+        "name": "🏃 Steps",
+        "value": 85
+      },
+      {
+        "name": "😴 Sleep",
+        "value": 71
+      },
+      {
+        "name": "📖 Reading",
+        "value": 57
+      },
+      {
+        "name": "🧘 Meditate",
+        "value": 43
+      }
+    ],
+    "leaderboardPreview": [
+      {
+        "rank": 1,
+        "initials": "AK",
+        "name": "Atcherboard",
+        "streak": 21,
+        "score": 98
+      },
+      {
+        "rank": 2,
+        "initials": "FR",
+        "name": "Flexiguru",
+        "streak": 19,
+        "score": 94
+      },
+      {
+        "rank": 7,
+        "initials": "AG",
+        "name": "Atchayam G.",
+        "streak": 14,
+        "score": 76,
+        "isMe": true
+      }
+    ]
+  },
+  "habits": [
+    {
+      "id": "h1",
+      "name": "💧 Drink 3L Water",
+      "time": "Morning",
+      "streak": 21,
+      "points": 20,
+      "completed": true,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h2",
+      "name": "🏃 10,000 Steps",
+      "time": "Anytime",
+      "streak": 14,
+      "points": 25,
+      "completed": true,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h3",
+      "name": "📖 Read 20 Minutes",
+      "time": "Evening",
+      "streak": 8,
+      "points": 15,
+      "completed": true,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h4",
+      "name": "😴 Sleep by 10:30 PM",
+      "time": "Night",
+      "streak": 5,
+      "points": 20,
+      "completed": true,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h5",
+      "name": "🧘 Meditate 10 min",
+      "time": "Morning",
+      "streak": 3,
+      "points": 15,
+      "completed": false,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h6",
+      "name": "🥗 Eat Clean Meals",
+      "time": "Mealtime",
+      "streak": 1,
+      "points": 15,
+      "completed": false,
+      "frequency": "Daily"
+    },
+    {
+      "id": "h7",
+      "name": "📝 Journal Entry",
+      "time": "Evening",
+      "streak": 0,
+      "points": 10,
+      "completed": false,
+      "frequency": "Daily"
+    }
+  ],
+  "weeklyOverview": [
+    {
+      "day": "Mon",
+      "completed": 7,
+      "total": 7
+    },
+    {
+      "day": "Tue",
+      "completed": 6,
+      "total": 7
+    },
+    {
+      "day": "Wed",
+      "completed": 7,
+      "total": 7
+    },
+    {
+      "day": "Thu",
+      "completed": 5,
+      "total": 7
+    },
+    {
+      "day": "Fri",
+      "completed": 7,
+      "total": 7
+    },
+    {
+      "day": "Sat",
+      "completed": 6,
+      "total": 7
+    },
+    {
+      "day": "Sun",
+      "completed": 4,
+      "total": 7
+    }
+  ],
+  "workouts": [
+    {
+      "id": "w1",
+      "title": "Upper Body Strength",
+      "icon": "💪",
+      "date": "Today",
+      "time": "7:00 AM",
+      "tags": [
+        "Strength",
+        "Chest",
+        "Back"
+      ],
+      "duration": 55,
+      "calories": 420,
+      "sets": 18
+    },
+    {
+      "id": "w2",
+      "title": "Morning Run",
+      "icon": "🏃",
+      "date": "Yesterday",
+      "time": "6:30 AM",
+      "tags": [
+        "Cardio",
+        "Endurance"
+      ],
+      "duration": 40,
+      "calories": 380,
+      "distance": 6.2
+    },
+    {
+      "id": "w3",
+      "title": "Leg Day",
+      "icon": "🦵",
+      "date": "Mar 1",
+      "time": "8:00 AM",
+      "tags": [
+        "Strength",
+        "Legs",
+        "Glutes"
+      ],
+      "duration": 60,
+      "calories": 510,
+      "sets": 22
+    },
+    {
+      "id": "w4",
+      "title": "Morning Yoga",
+      "icon": "🧘",
+      "date": "Feb 28",
+      "time": "7:30 AM",
+      "tags": [
+        "Flexibility",
+        "Recovery"
+      ],
+      "duration": 30,
+      "calories": 180,
+      "sets": 12
+    },
+    {
+      "id": "w5",
+      "title": "Cycling Session",
+      "icon": "🚴",
+      "date": "Feb 27",
+      "time": "6:00 PM",
+      "tags": [
+        "Cardio",
+        "Cycling"
+      ],
+      "duration": 45,
+      "calories": 390,
+      "distance": 18.5
+    }
+  ],
+  "progressPhotos": [
+    {
+      "id": "p1",
+      "date": "January 1, 2026",
+      "weight": 82.0,
+      "label": "Start",
+      "emoji": "🧍",
+      "badge": "Before",
+      "badgeType": "yellow"
+    },
+    {
+      "id": "p2",
+      "date": "January 22, 2026",
+      "weight": 80.2,
+      "label": "Week 3",
+      "emoji": "🧍‍♂️",
+      "badge": "-1.8 kg",
+      "badgeType": "purple"
+    },
+    {
+      "id": "p3",
+      "date": "February 8, 2026",
+      "weight": 79.0,
+      "label": "Week 5",
+      "emoji": "🏃",
+      "badge": "-3.0 kg",
+      "badgeType": "purple"
+    },
+    {
+      "id": "p4",
+      "date": "March 1, 2026",
+      "weight": 77.5,
+      "label": "Week 9",
+      "emoji": "💪",
+      "badge": "-4.5 kg ✓",
+      "badgeType": "green"
+    }
+  ],
+  "weightTrend": [
+    {
+      "week": "W1",
+      "weight": 82.0
+    },
+    {
+      "week": "W3",
+      "weight": 80.2
+    },
+    {
+      "week": "W5",
+      "weight": 79.0
+    },
+    {
+      "week": "W7",
+      "weight": 78.1
+    },
+    {
+      "week": "W9",
+      "weight": 77.5
+    }
+  ],
+  "communityFeed": [
+    {
+      "id": "f1",
+      "userInitials": "RK",
+      "userName": "Ramesh K.",
+      "userAvatar": "",
+      "badge": "🔥 21 Streak",
+      "category": "all",
+      "isFriend": true,
+      "trendingScore": 45,
+      "imageUrl": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80",
+      "text": "Just completed my 21-day streak! The discipline score system keeps me so motivated. Never felt this consistent before. 💪",
+      "likes": 24,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c1",
+          "userInitials": "PS",
+          "userName": "Priya S.",
+          "text": "Amazing consistency! Keep it up! 🙌",
+          "time": "2h ago"
+        },
+        {
+          "id": "c2",
+          "userInitials": "MV",
+          "userName": "Mohan V.",
+          "text": "21 days is no joke bro, respect!",
+          "time": "1h ago"
+        },
+        {
+          "id": "c3",
+          "userInitials": "SN",
+          "userName": "Sneha N.",
+          "text": "You inspire all of us Ramesh!",
+          "time": "45m ago"
+        }
+      ],
+      "time": "3h ago"
+    },
+    {
+      "id": "f2",
+      "userInitials": "PS",
+      "userName": "Priya S.",
+      "userAvatar": "",
+      "badge": "⭐ Top 10%",
+      "category": "trending",
+      "isFriend": true,
+      "trendingScore": 89,
+      "imageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+      "text": "Morning 5K done before sunrise ☀️ Consistency is the key. Day 45 of my running journey! Who else is up at dawn?",
+      "likes": 31,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c4",
+          "userInitials": "RK",
+          "userName": "Ramesh K.",
+          "text": "Beast mode! I struggle to wake up at 7 lol",
+          "time": "5h ago"
+        },
+        {
+          "id": "c5",
+          "userInitials": "AJ",
+          "userName": "Arjun J.",
+          "text": "Same! 5AM club for life 🌅",
+          "time": "4h ago"
+        }
+      ],
+      "time": "6h ago"
+    },
+    {
+      "id": "f3",
+      "userInitials": "MV",
+      "userName": "Mohan V.",
+      "userAvatar": "",
+      "badge": "🏆 Challenge Leader",
+      "category": "trending",
+      "isFriend": false,
+      "trendingScore": 76,
+      "imageUrl": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80",
+      "text": "Meal prepped for the whole week 🥗 Clean eating + training = results. Dropped 3kg this month following the AI nutrition plan!",
+      "likes": 19,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c6",
+          "userInitials": "KR",
+          "userName": "Kavya R.",
+          "text": "That looks so good! Share the recipe?",
+          "time": "8h ago"
+        },
+        {
+          "id": "c7",
+          "userInitials": "PS",
+          "userName": "Priya S.",
+          "text": "The AI nutrition plan is a game changer!",
+          "time": "7h ago"
+        }
+      ],
+      "time": "9h ago"
+    },
+    {
+      "id": "f4",
+      "userInitials": "SN",
+      "userName": "Sneha N.",
+      "userAvatar": "",
+      "badge": "💪 Strength",
+      "category": "all",
+      "isFriend": true,
+      "trendingScore": 92,
+      "imageUrl": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "text": "New PR on deadlift today — 80kg! 🏋️‍♀️ Six months ago I could barely lift 30kg. Discipl.AI workout plans are literally life changing.",
+      "likes": 42,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c8",
+          "userInitials": "MV",
+          "userName": "Mohan V.",
+          "text": "80kg?! Absolute QUEEN 👑",
+          "time": "1h ago"
+        },
+        {
+          "id": "c9",
+          "userInitials": "RK",
+          "userName": "Ramesh K.",
+          "text": "That progress is insane! Congrats!",
+          "time": "2h ago"
+        },
+        {
+          "id": "c10",
+          "userInitials": "AJ",
+          "userName": "Arjun J.",
+          "text": "Goals!! Keep crushing it 💥",
+          "time": "30m ago"
+        }
+      ],
+      "time": "2h ago"
+    },
+    {
+      "id": "f5",
+      "userInitials": "AJ",
+      "userName": "Arjun J.",
+      "userAvatar": "",
+      "badge": "🌟 Consistent",
+      "category": "all",
+      "isFriend": false,
+      "trendingScore": 34,
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "text": "Yoga + meditation morning routine is transforming my mental game 🧘 Stress levels down 60%. Physical fitness is only half the equation.",
+      "likes": 28,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c11",
+          "userInitials": "SN",
+          "userName": "Sneha N.",
+          "text": "The mental health aspect is so underrated!",
+          "time": "3h ago"
+        }
+      ],
+      "time": "4h ago"
+    },
+    {
+      "id": "f6",
+      "userInitials": "KR",
+      "userName": "Kavya R.",
+      "userAvatar": "",
+      "badge": "🚀 Rising Star",
+      "category": "trending",
+      "isFriend": true,
+      "trendingScore": 98,
+      "imageUrl": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "text": "Week 1 transformation complete 📊 Down 2kg, up in energy, sleep improved massively. The habit tracking feature is absolutely incredible!",
+      "likes": 56,
+      "liked": false,
+      "comments": [
+        {
+          "id": "c12",
+          "userInitials": "RK",
+          "userName": "Ramesh K.",
+          "text": "Week 1 legend! Imagine week 12 🔥",
+          "time": "30m ago"
+        },
+        {
+          "id": "c13",
+          "userInitials": "PS",
+          "userName": "Priya S.",
+          "text": "The sleep tracking changed my life too!",
+          "time": "1h ago"
+        },
+        {
+          "id": "c14",
+          "userInitials": "MV",
+          "userName": "Mohan V.",
+          "text": "You are going to crush it Kavya!",
+          "time": "2h ago"
+        }
+      ],
+      "time": "1h ago"
+    }
+  ],
+  "challenges": {
+    "active": {
+      "name": "30-Day Discipline Challenge",
+      "day": 14,
+      "totalDays": 30,
+      "rank": 7,
+      "participants": 320,
+      "points": 1840
+    },
+    "list": [
+      {
+        "id": "c1",
+        "name": "30-Day Discipline Challenge",
+        "status": "active",
+        "description": "Build unbreakable habits over 30 days. Log workouts, complete habits, and climb the leaderboard.",
+        "category": "Lifestyle",
+        "daysLeft": 16,
+        "daysCurrent": 14,
+        "daysTotal": 30,
+        "participants": 320,
+        "maxParticipants": 500,
+        "progress": 47,
+        "rank": 7,
+        "points": 1840,
+        "pointsMax": 3000,
+        "reward": "Gold Badge + 5000 pts",
+        "rewardIcon": "🥇",
+        "rules": [
+          "Complete all daily habits",
+          "Log at least 4 workouts per week",
+          "Maintain a streak for 20+ days",
+          "Earn minimum 100 pts/day"
+        ],
+        "milestones": [
+          {
+            "day": 7,
+            "label": "Week 1 Complete",
+            "pts": 500,
+            "achieved": true
+          },
+          {
+            "day": 14,
+            "label": "Halfway Mark",
+            "pts": 1000,
+            "achieved": true
+          },
+          {
+            "day": 21,
+            "label": "3 Weeks Strong",
+            "pts": 1500,
+            "achieved": false
+          },
+          {
+            "day": 30,
+            "label": "Champion!",
+            "pts": 5000,
+            "achieved": false
+          }
+        ],
+        "dailyLog": [
+          {
+            "day": 1,
+            "pts": 120,
+            "completed": true
+          },
+          {
+            "day": 2,
+            "pts": 110,
+            "completed": true
+          },
+          {
+            "day": 3,
+            "pts": 140,
+            "completed": true
+          },
+          {
+            "day": 4,
+            "pts": 90,
+            "completed": true
+          },
+          {
+            "day": 5,
+            "pts": 130,
+            "completed": true
+          },
+          {
+            "day": 6,
+            "pts": 125,
+            "completed": true
+          },
+          {
+            "day": 7,
+            "pts": 145,
+            "completed": true
+          },
+          {
+            "day": 8,
+            "pts": 110,
+            "completed": true
+          },
+          {
+            "day": 9,
+            "pts": 100,
+            "completed": true
+          },
+          {
+            "day": 10,
+            "pts": 135,
+            "completed": true
+          },
+          {
+            "day": 11,
+            "pts": 120,
+            "completed": true
+          },
+          {
+            "day": 12,
+            "pts": 115,
+            "completed": true
+          },
+          {
+            "day": 13,
+            "pts": 130,
+            "completed": true
+          },
+          {
+            "day": 14,
+            "pts": 120,
+            "completed": true
+          }
+        ]
+      },
+      {
+        "id": "c2",
+        "name": "Fat Loss Sprint — April",
+        "status": "upcoming",
+        "description": "A focused 21-day fat loss sprint combining cardio, nutrition discipline, and accountability.",
+        "category": "Fat Loss",
+        "startDate": "April 1, 2026",
+        "daysTotal": 21,
+        "participants": 156,
+        "maxParticipants": 300,
+        "reward": "Platinum Badge + 8000 pts",
+        "rewardIcon": "🏆",
+        "rules": [
+          "Log cardio 5x per week",
+          "No junk food habit streak",
+          "Daily weigh-in check",
+          "Post progress photo weekly"
+        ],
+        "milestones": [
+          {
+            "day": 7,
+            "label": "First Week",
+            "pts": 700,
+            "achieved": false
+          },
+          {
+            "day": 14,
+            "label": "Two Weeks",
+            "pts": 1500,
+            "achieved": false
+          },
+          {
+            "day": 21,
+            "label": "Sprint Done!",
+            "pts": 8000,
+            "achieved": false
+          }
+        ]
+      },
+      {
+        "id": "c3",
+        "name": "Corporate Wellness League",
+        "status": "open",
+        "description": "Team-based wellness challenge open to all. Build healthy habits together and win for your team.",
+        "category": "Wellness",
+        "daysTotal": 45,
+        "participants": 1240,
+        "maxParticipants": 2000,
+        "reward": "Trophy + ₹500 voucher",
+        "rewardIcon": "🎖",
+        "rules": [
+          "At least 3 habits per day",
+          "Team of 5 members",
+          "Weekly team score aggregated",
+          "Top 3 teams win vouchers"
+        ],
+        "milestones": [
+          {
+            "day": 15,
+            "label": "Phase 1",
+            "pts": 500,
+            "achieved": false
+          },
+          {
+            "day": 30,
+            "label": "Phase 2",
+            "pts": 1500,
+            "achieved": false
+          },
+          {
+            "day": 45,
+            "label": "Champion",
+            "pts": 5000,
+            "achieved": false
+          }
+        ]
+      }
+    ],
+    "leaderboard": [
+      {
+        "rank": 1,
+        "initials": "VF",
+        "name": "VikramFit",
+        "score": 99,
+        "streak": 30
+      },
+      {
+        "rank": 2,
+        "initials": "AK",
+        "name": "Atcherboard",
+        "score": 98,
+        "streak": 28
+      },
+      {
+        "rank": 3,
+        "initials": "SM",
+        "name": "SahilMax",
+        "score": 97,
+        "streak": 26
+      },
+      {
+        "rank": 4,
+        "initials": "DR",
+        "name": "DisciplineRaj",
+        "score": 95,
+        "streak": 25
+      },
+      {
+        "rank": 5,
+        "initials": "PS",
+        "name": "Priya S.",
+        "score": 93,
+        "streak": 24
+      },
+      {
+        "rank": 7,
+        "initials": "AG",
+        "name": "Atchayam G.",
+        "score": 76,
+        "streak": 14,
+        "isMe": true
+      }
+    ]
+  },
+  "leaderboard": {
+    "global": [
+      {
+        "rank": 1,
+        "initials": "VF",
+        "name": "VikramFit",
+        "score": 99,
+        "points": 28400,
+        "streak": 90
+      },
+      {
+        "rank": 2,
+        "initials": "AK",
+        "name": "Atcherboard",
+        "score": 98,
+        "points": 26100,
+        "streak": 78
+      },
+      {
+        "rank": 3,
+        "initials": "SM",
+        "name": "SahilMax",
+        "score": 97,
+        "points": 24800,
+        "streak": 65
+      },
+      {
+        "rank": 4,
+        "initials": "DR",
+        "name": "DisciplineRaj",
+        "score": 95,
+        "points": 22300,
+        "streak": 55
+      },
+      {
+        "rank": 5,
+        "initials": "PS",
+        "name": "Priya S.",
+        "score": 93,
+        "points": 20100,
+        "streak": 48
+      }
+    ],
+    "friends": [
+      {
+        "rank": 1,
+        "initials": "RK",
+        "name": "Ramesh K.",
+        "score": 88,
+        "streak": 21
+      },
+      {
+        "rank": 2,
+        "initials": "MV",
+        "name": "Mohan V.",
+        "score": 82,
+        "streak": 18
+      },
+      {
+        "rank": 3,
+        "initials": "AG",
+        "name": "Atchayam G.",
+        "score": 76,
+        "streak": 14,
+        "isMe": true
+      },
+      {
+        "rank": 4,
+        "initials": "SN",
+        "name": "Sneha N.",
+        "score": 71,
+        "streak": 11
+      },
+      {
+        "rank": 5,
+        "initials": "AJ",
+        "name": "Arjun J.",
+        "score": 68,
+        "streak": 9
+      },
+      {
+        "rank": 6,
+        "initials": "KR",
+        "name": "Kavya R.",
+        "score": 62,
+        "streak": 7
+      }
+    ],
+    "badges": [
+      {
+        "name": "🔥 Streak Master",
+        "desc": "30-day streak",
+        "unlocked": true
+      },
+      {
+        "name": "💪 Iron Will",
+        "desc": "Score 80+",
+        "unlocked": true
+      },
+      {
+        "name": "🌟 Community Star",
+        "desc": "50 likes received",
+        "unlocked": true
+      },
+      {
+        "name": "🏆 Challenge Winner",
+        "desc": "Win a challenge",
+        "unlocked": true
+      },
+      {
+        "name": "📊 Data Driven",
+        "desc": "Log 30 workouts",
+        "unlocked": true
+      },
+      {
+        "name": "🚀 Elite",
+        "desc": "Score 90+",
+        "unlocked": false
+      }
+    ]
+  },
+  "aiInsights": {
+    "weeklyReport": "You crushed it this week! 87% habit completion with a 14-day streak is outstanding. Your discipline score grew by 4 points. Focus on Thursday engagement to break into the top 5% globally.",
+    "metrics": [
+      {
+        "label": "Habit Completion",
+        "value": "87%",
+        "trend": "up"
+      },
+      {
+        "label": "Workout Consistency",
+        "value": "71%",
+        "trend": "up"
+      },
+      {
+        "label": "Sleep Quality",
+        "value": "74%",
+        "trend": "neutral"
+      },
+      {
+        "label": "Hydration",
+        "value": "90%",
+        "trend": "up"
+      },
+      {
+        "label": "Community Engagement",
+        "value": "60%",
+        "trend": "down"
+      },
+      {
+        "label": "Score Change",
+        "value": "+4",
+        "trend": "up"
+      }
+    ],
+    "prediction": {
+      "currentWeight": 77.5,
+      "goalWeight": 72.0,
+      "projectedDate": "~May 15, 2026",
+      "weeklyRate": "0.5 kg/week",
+      "ahead": "+2 weeks ahead"
+    },
+    "patterns": [
+      {
+        "type": "positive",
+        "title": "Morning Workout Advantage",
+        "desc": "You're 3x more likely to complete all habits on days you work out before 9 AM."
+      },
+      {
+        "type": "warning",
+        "title": "Thursday Dip Detected",
+        "desc": "Your habit completion drops 28% every Thursday. Consider scheduling an accountability check-in."
+      },
+      {
+        "type": "positive",
+        "title": "Community Engagement Boost",
+        "desc": "Posts in community feed correlate with +12 discipline score points the following day."
+      }
+    ]
+  },
+  "analytics": {
+    "scoreTrend": [
+      {
+        "week": "W1",
+        "score": 58
+      },
+      {
+        "week": "W2",
+        "score": 61
+      },
+      {
+        "week": "W3",
+        "score": 63
+      },
+      {
+        "week": "W4",
+        "score": 65
+      },
+      {
+        "week": "W5",
+        "score": 67
+      },
+      {
+        "week": "W6",
+        "score": 70
+      },
+      {
+        "week": "W7",
+        "score": 72
+      },
+      {
+        "week": "W8",
+        "score": 74
+      },
+      {
+        "week": "W9",
+        "score": 76
+      }
+    ],
+    "habitCategories": [
+      {
+        "name": "Physical",
+        "value": 88
+      },
+      {
+        "name": "Nutrition",
+        "value": 72
+      },
+      {
+        "name": "Mental",
+        "value": 61
+      },
+      {
+        "name": "Sleep",
+        "value": 74
+      },
+      {
+        "name": "Social",
+        "value": 55
+      }
+    ],
+    "workoutTypes": [
+      {
+        "type": "Strength",
+        "count": 18
+      },
+      {
+        "type": "Cardio",
+        "count": 12
+      },
+      {
+        "type": "Yoga",
+        "count": 6
+      },
+      {
+        "type": "Cycling",
+        "count": 2
+      }
+    ]
+  },
+  "auth": {
+    "validUsers": [
+      {
+        "id": "user_001",
+        "email": "atchayam@example.com",
+        "password": "demo123",
+        "name": "Atchayam G.",
+        "username": "atchayam",
+        "bio": "Building discipline one day at a time 💪",
+        "goal": "Lose 10kg by June 2026",
+        "avatarInitials": "AG",
+        "isPremium": true
+      },
+      {
+        "id": "user_002",
+        "email": "demo@discipl.ai",
+        "password": "demo123",
+        "name": "Demo User",
+        "username": "demouser",
+        "bio": "Just getting started!",
+        "goal": "Build a consistent routine",
+        "avatarInitials": "DU",
+        "isPremium": false
+      }
+    ]
+  },
+  "exerciseCatalog": [
+    {
+      "id": "e1",
+      "name": "Bench Press",
+      "category": "Chest",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🏋️"
+    },
+    {
+      "id": "e2",
+      "name": "Push Ups",
+      "category": "Chest",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e3",
+      "name": "Incline Dumbbell Press",
+      "category": "Chest",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🏋️"
+    },
+    {
+      "id": "e4",
+      "name": "Pull Ups",
+      "category": "Back",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🧗"
+    },
+    {
+      "id": "e5",
+      "name": "Deadlift",
+      "category": "Back",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🏋️"
+    },
+    {
+      "id": "e6",
+      "name": "Bent Over Row",
+      "category": "Back",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e7",
+      "name": "Squats",
+      "category": "Legs",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🦵"
+    },
+    {
+      "id": "e8",
+      "name": "Leg Press",
+      "category": "Legs",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🦵"
+    },
+    {
+      "id": "e9",
+      "name": "Lunges",
+      "category": "Legs",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🚶"
+    },
+    {
+      "id": "e10",
+      "name": "Shoulder Press",
+      "category": "Shoulders",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "🏋️"
+    },
+    {
+      "id": "e11",
+      "name": "Lateral Raises",
+      "category": "Shoulders",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e12",
+      "name": "Bicep Curls",
+      "category": "Arms",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e13",
+      "name": "Tricep Dips",
+      "category": "Arms",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e14",
+      "name": "Plank",
+      "category": "Core",
+      "type": "strength",
+      "unit": "seconds",
+      "icon": "🧘"
+    },
+    {
+      "id": "e15",
+      "name": "Crunches",
+      "category": "Core",
+      "type": "strength",
+      "unit": "reps",
+      "icon": "💪"
+    },
+    {
+      "id": "e16",
+      "name": "Running",
+      "category": "Cardio",
+      "type": "cardio",
+      "unit": "km",
+      "icon": "🏃"
+    },
+    {
+      "id": "e17",
+      "name": "Cycling",
+      "category": "Cardio",
+      "type": "cardio",
+      "unit": "km",
+      "icon": "🚴"
+    },
+    {
+      "id": "e18",
+      "name": "Jump Rope",
+      "category": "Cardio",
+      "type": "cardio",
+      "unit": "minutes",
+      "icon": "⏱"
+    },
+    {
+      "id": "e19",
+      "name": "Burpees",
+      "category": "Cardio",
+      "type": "cardio",
+      "unit": "reps",
+      "icon": "🔥"
+    },
+    {
+      "id": "e20",
+      "name": "Swimming",
+      "category": "Cardio",
+      "type": "cardio",
+      "unit": "laps",
+      "icon": "🏊"
+    },
+    {
+      "id": "e21",
+      "name": "Yoga",
+      "category": "Flexibility",
+      "type": "flexibility",
+      "unit": "minutes",
+      "icon": "🧘"
+    },
+    {
+      "id": "e22",
+      "name": "Stretching",
+      "category": "Flexibility",
+      "type": "flexibility",
+      "unit": "minutes",
+      "icon": "🤸"
+    }
+  ]
+}

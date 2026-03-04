@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.disciplai.app-mergeReleaseResources-41:/values-v31/values-v31.xml",
+            "map": [
+                {
+                    "source": "D:\\Work\\Claude\\Discipl-ai\\DISCIPL_AI_Flutter\\discipl_ai\\android\\app\\src\\main\\res\\values-v31\\styles.xml",
+                    "from": {
+                        "startLines": "3,9",
+                        "startColumns": "4,4",
+                        "startOffsets": "144,558",
+                        "endLines": "8,11",
+                        "endColumns": "12,12",
+                        "endOffsets": "553,722"
+                    },
+                    "to": {
+                        "startLines": "2,8",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,469",
+                        "endLines": "7,10",
+                        "endColumns": "12,12",
+                        "endOffsets": "464,633"
+                    }
+                }
+            ]
+        }
+    ]
+}

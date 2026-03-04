@@ -1,0 +1,233 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.disciplai.app"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="35" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:2:5-66
+15-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:2:22-64
+16    <uses-permission android:name="android.permission.CAMERA" />
+16-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:3:5-64
+16-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:3:22-62
+17    <uses-permission
+17-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:4:5-5:37
+18        android:name="android.permission.READ_EXTERNAL_STORAGE"
+18-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:4:22-77
+19        android:maxSdkVersion="32" />
+19-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:5:9-35
+20    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+20-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:6:5-75
+20-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:6:22-73
+21    <uses-permission
+21-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:7:5-8:37
+22        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+22-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:7:22-78
+23        android:maxSdkVersion="29" />
+23-->D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\android\app\src\main\AndroidManifest.xml:8:9-35
+24
+25    <permission
+25-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+26        android:name="com.disciplai.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+26-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+27        android:protectionLevel="signature" />
+27-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+28
+29    <uses-permission android:name="com.disciplai.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+29-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+29-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+30
+31    <application
+32        android:name="android.app.Application"
+33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+33-->[androidx.core:core:1.13.1] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\8cf478dec41eed746328fa8046755ba2\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+34        android:debuggable="true"
+35        android:extractNativeLibs="true"
+36        android:icon="@mipmap/ic_launcher"
+37        android:label="Discipl.AI"
+38        android:roundIcon="@mipmap/ic_launcher_round" >
+39        <activity
+40            android:name="com.disciplai.app.MainActivity"
+41            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+42            android:exported="true"
+43            android:hardwareAccelerated="true"
+44            android:launchMode="singleTop"
+45            android:taskAffinity=""
+46            android:theme="@style/LaunchTheme"
+47            android:windowSoftInputMode="adjustResize" >
+48            <meta-data
+49                android:name="io.flutter.embedding.android.NormalTheme"
+50                android:resource="@style/NormalTheme" />
+51
+52            <intent-filter>
+53                <action android:name="android.intent.action.MAIN" />
+54
+55                <category android:name="android.intent.category.LAUNCHER" />
+56            </intent-filter>
+57        </activity>
+58
+59        <meta-data
+60            android:name="flutterEmbedding"
+61            android:value="2" />
+62        <!--
+63           Declares a provider which allows us to store files to share in
+64           '.../caches/share_plus' and grant the receiving action access
+65        -->
+66        <provider
+66-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:9-21:20
+67            android:name="dev.fluttercommunity.plus.share.ShareFileProvider"
+67-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:14:13-77
+68            android:authorities="com.disciplai.app.flutter.share_provider"
+68-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:15:13-74
+69            android:exported="false"
+69-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:16:13-37
+70            android:grantUriPermissions="true" >
+70-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:17:13-47
+71            <meta-data
+71-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:18:13-20:68
+72                android:name="android.support.FILE_PROVIDER_PATHS"
+72-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:19:17-67
+73                android:resource="@xml/flutter_share_file_paths" />
+73-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:20:17-65
+74        </provider>
+75        <!--
+76           This manifest declared broadcast receiver allows us to use an explicit
+77           Intent when creating a PendingItent to be informed of the user's choice
+78        -->
+79        <receiver
+79-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:26:9-32:20
+80            android:name="dev.fluttercommunity.plus.share.SharePlusPendingIntent"
+80-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:27:13-82
+81            android:exported="false" >
+81-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:28:13-37
+82            <intent-filter>
+82-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:29:13-31:29
+83                <action android:name="EXTRA_CHOSEN_COMPONENT" />
+83-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:17-65
+83-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:25-62
+84            </intent-filter>
+85        </receiver>
+86
+87        <provider
+87-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:9:9-17:20
+88            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+88-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:10:13-82
+89            android:authorities="com.disciplai.app.flutter.image_provider"
+89-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:11:13-74
+90            android:exported="false"
+90-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:12:13-37
+91            android:grantUriPermissions="true" >
+91-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:13-47
+92            <meta-data
+92-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:18:13-20:68
+93                android:name="android.support.FILE_PROVIDER_PATHS"
+93-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:19:17-67
+94                android:resource="@xml/flutter_image_picker_file_paths" />
+94-->[:share_plus] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\share_plus\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:20:17-65
+95        </provider> <!-- Trigger Google Play services to install the backported photo picker module. -->
+96        <service
+96-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:19:9-31:19
+97            android:name="com.google.android.gms.metadata.ModuleDependencies"
+97-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:20:13-78
+98            android:enabled="false"
+98-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:21:13-36
+99            android:exported="false" >
+99-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:22:13-37
+100            <intent-filter>
+100-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:24:13-26:29
+101                <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
+101-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:25:17-94
+101-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:25:25-91
+102            </intent-filter>
+103
+104            <meta-data
+104-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:28:13-30:36
+105                android:name="photopicker_activity:0:required"
+105-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:29:17-63
+106                android:value="" />
+106-->[:image_picker_android] D:\Work\Claude\Discipl-ai\DISCIPL_AI_Flutter\discipl_ai\build\image_picker_android\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:30:17-33
+107        </service>
+108
+109        <uses-library
+109-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+110            android:name="androidx.window.extensions"
+110-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+111            android:required="false" />
+111-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+112        <uses-library
+112-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+113            android:name="androidx.window.sidecar"
+113-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+114            android:required="false" />
+114-->[androidx.window:window:1.2.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\5093ab42d2307deb2d7ac0b7f5718c38\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+115
+116        <provider
+116-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+117            android:name="androidx.startup.InitializationProvider"
+117-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+118            android:authorities="com.disciplai.app.androidx-startup"
+118-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+119            android:exported="false" >
+119-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+120            <meta-data
+120-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+121                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+121-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+122                android:value="androidx.startup" />
+122-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\e80aa748ff6540407d8dba61c0d945fe\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+123            <meta-data
+123-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+124                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+124-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+125                android:value="androidx.startup" />
+125-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+126        </provider>
+127
+128        <receiver
+128-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+129            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+129-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+130            android:directBootAware="false"
+130-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+131            android:enabled="true"
+131-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+132            android:exported="true"
+132-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+133            android:permission="android.permission.DUMP" >
+133-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+134            <intent-filter>
+134-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+135                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+135-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+135-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+136            </intent-filter>
+137            <intent-filter>
+137-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+138                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+138-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+138-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+139            </intent-filter>
+140            <intent-filter>
+140-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+141                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+141-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+141-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+142            </intent-filter>
+143            <intent-filter>
+143-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+144                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+144-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+144-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\Atchayam\.gradle\caches\8.10.2\transforms\4051a23600791cfac099a18cb55e807e\transformed\jetified-profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+145            </intent-filter>
+146        </receiver>
+147    </application>
+148
+149</manifest>
