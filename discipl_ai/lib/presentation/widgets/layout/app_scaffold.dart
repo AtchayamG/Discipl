@@ -5,7 +5,6 @@ import '../../../core/utils/responsive.dart';
 import '../../../core/utils/theme_utils.dart';
 import '../../../providers/app_provider.dart';
 import '../../../providers/language_provider.dart';
-import '../../screens/notifications/notifications_screen.dart';
 
 class AppScaffold extends StatefulWidget {
   final Widget child;
@@ -97,16 +96,7 @@ class _TopBar extends StatelessWidget {
           ]),
         ),
         const Spacer(),
-        _IconBtn(
-          icon: Icons.notifications_outlined,
-          badge: 3,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
-          ),
-        ),
-        const SizedBox(width: 6),
-        _IconBtn(icon: Icons.search_rounded, onTap: () {}),
+        _SearchBtn(),
         const SizedBox(width: 6),
         _IconBtn(
           icon: provider.themeMode == ThemeMode.dark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
@@ -330,6 +320,260 @@ class _BottomNav extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// ─── Search button with overlay ──────────────────────────────────────────────
+class _SearchBtn extends StatefulWidget {
+  const _SearchBtn();
+  @override
+  State<_SearchBtn> createState() => _SearchBtnState();
+}
+
+class _SearchBtnState extends State<_SearchBtn> {
+  final _ctrl  = TextEditingController();
+  final _focus = FocusNode();
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlay;
+
+  static const _pages = [
+    {'label': 'Dashboard',   'icon': Icons.grid_view_rounded,          'index': 0},
+    {'label': 'Habits',      'icon': Icons.check_circle_outline_rounded,'index': 1},
+    {'label': 'Workouts',    'icon': Icons.show_chart_rounded,          'index': 2},
+    {'label': 'Photos',      'icon': Icons.photo_camera_outlined,       'index': 3},
+    {'label': 'Community',   'icon': Icons.people_outline_rounded,      'index': 4},
+    {'label': 'Challenges',  'icon': Icons.emoji_events_outlined,       'index': 5},
+    {'label': 'Leaderboard', 'icon': Icons.leaderboard_rounded,         'index': 6},
+    {'label': 'AI Insights', 'icon': Icons.auto_awesome_outlined,       'index': 7},
+    {'label': 'Analytics',   'icon': Icons.analytics_outlined,          'index': 8},
+    {'label': 'Settings',    'icon': Icons.settings_outlined,           'index': 9},
+  ];
+
+  String _query = '';
+
+  List<Map<String, Object>> get _results {
+    if (_query.trim().isEmpty) return List<Map<String, Object>>.from(_pages);
+    final q = _query.toLowerCase();
+    return _pages
+        .where((p) => (p['label'] as String).toLowerCase().contains(q))
+        .map((p) => Map<String, Object>.from(p))
+        .toList();
+  }
+
+  void _openOverlay() {
+    _removeOverlay();
+    final overlay = Overlay.of(context);
+    _overlay = OverlayEntry(builder: (ctx) => _SearchOverlay(
+      link: _layerLink,
+      ctrl: _ctrl,
+      focus: _focus,
+      results: _results,
+      query: _query,
+      onQueryChanged: (v) {
+        setState(() => _query = v);
+        _overlay?.markNeedsBuild();
+      },
+      onSelect: (idx) {
+        _close();
+        context.read<AppProvider>().navigate(idx);
+      },
+      onDismiss: _close,
+    ));
+    overlay.insert(_overlay!);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+  }
+
+  void _removeOverlay() {
+    _overlay?.remove();
+    _overlay = null;
+  }
+
+  void _close() {
+    _ctrl.clear();
+    _query = '';
+    _focus.unfocus();
+    _removeOverlay();
+    if (mounted) setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _removeOverlay();
+    _ctrl.dispose();
+    _focus.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tc = TC.of(context);
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        onTap: _openOverlay,
+        child: Container(
+          width: 34, height: 34,
+          decoration: BoxDecoration(
+            color: tc.cardBg2,
+            borderRadius: BorderRadius.circular(AppSizes.radiusSm),
+            border: Border.all(color: tc.border),
+            boxShadow: tc.cardShadow,
+          ),
+          child: const Center(child: Icon(Icons.search_rounded, size: 16, color: Color(AppColors.textMuted))),
+        ),
+      ),
+    );
+  }
+}
+
+class _SearchOverlay extends StatelessWidget {
+  final LayerLink link;
+  final TextEditingController ctrl;
+  final FocusNode focus;
+  final List<Map<String, Object>> results;
+  final String query;
+  final ValueChanged<String> onQueryChanged;
+  final ValueChanged<int> onSelect;
+  final VoidCallback onDismiss;
+
+  const _SearchOverlay({
+    required this.link,
+    required this.ctrl,
+    required this.focus,
+    required this.results,
+    required this.query,
+    required this.onQueryChanged,
+    required this.onSelect,
+    required this.onDismiss,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final tc = TC.of(context);
+    return Stack(children: [
+      // Tap-outside to dismiss
+      Positioned.fill(
+        child: GestureDetector(
+          onTap: onDismiss,
+          behavior: HitTestBehavior.translucent,
+          child: const SizedBox.expand(),
+        ),
+      ),
+      // Search panel anchored below the button
+      CompositedTransformFollower(
+        link: link,
+        showWhenUnlinked: false,
+        offset: const Offset(-266, 42), // align right edge, drop below button
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: 300,
+            constraints: const BoxConstraints(maxHeight: 400),
+            decoration: BoxDecoration(
+              color: tc.cardBg,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: tc.border),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.35), blurRadius: 24, offset: const Offset(0, 8)),
+              ],
+            ),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              // Search input
+              Padding(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 8),
+                child: Row(children: [
+                  const Icon(Icons.search_rounded, size: 16, color: Color(AppColors.textMuted)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: ctrl,
+                      focusNode: focus,
+                      onChanged: onQueryChanged,
+                      style: TextStyle(
+                        fontFamily: AppTypography.displayFont,
+                        fontSize: 13, color: tc.textPrimary),
+                      decoration: InputDecoration(
+                        hintText: 'Search pages...',
+                        hintStyle: TextStyle(color: tc.textMuted, fontSize: 13),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        isDense: true,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: onDismiss,
+                    child: Icon(Icons.close_rounded, size: 14, color: tc.textMuted),
+                  ),
+                ]),
+              ),
+              Divider(height: 1, color: tc.border),
+              // Results
+              if (results.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text('No results for "$query"',
+                    style: TextStyle(fontFamily: AppTypography.bodyFont, fontSize: 13, color: tc.textMuted)),
+                )
+              else
+                Flexible(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    shrinkWrap: true,
+                    itemCount: results.length,
+                    itemBuilder: (_, i) {
+                      final item = results[i];
+                      final label = item['label'] as String;
+                      final icon  = item['icon']  as IconData;
+                      final idx   = item['index'] as int;
+                      final isMatch = query.isNotEmpty &&
+                          label.toLowerCase().contains(query.toLowerCase());
+                      return InkWell(
+                        onTap: () => onSelect(idx),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                          child: Row(children: [
+                            Container(
+                              width: 32, height: 32,
+                              decoration: BoxDecoration(
+                                color: isMatch
+                                    ? const Color(AppColors.lime).withOpacity(0.12)
+                                    : tc.cardBg2,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isMatch
+                                      ? const Color(AppColors.lime).withOpacity(0.35)
+                                      : tc.border),
+                              ),
+                              child: Icon(icon, size: 15,
+                                color: isMatch
+                                    ? const Color(AppColors.lime)
+                                    : tc.textMuted),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(label,
+                                style: TextStyle(
+                                  fontFamily: AppTypography.displayFont,
+                                  fontSize: 13, fontWeight: FontWeight.w600,
+                                  color: isMatch ? const Color(AppColors.lime) : tc.textPrimary)),
+                            ),
+                            Icon(Icons.arrow_forward_ios_rounded, size: 10, color: tc.textMuted),
+                          ]),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              const SizedBox(height: 4),
+            ]),
+          ),
+        ),
+      ),
+    ]);
   }
 }
 
