@@ -5,6 +5,7 @@ import '../../../core/utils/responsive.dart';
 import '../../../core/utils/theme_utils.dart';
 import '../../../providers/app_provider.dart';
 import '../../../providers/language_provider.dart';
+import '../../screens/notifications/notifications_screen.dart';
 
 class AppScaffold extends StatefulWidget {
   final Widget child;
@@ -96,7 +97,14 @@ class _TopBar extends StatelessWidget {
           ]),
         ),
         const Spacer(),
-        _IconBtn(icon: Icons.notifications_outlined, badge: 3, onTap: () {}),
+        _IconBtn(
+          icon: Icons.notifications_outlined,
+          badge: 3,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+          ),
+        ),
         const SizedBox(width: 6),
         _IconBtn(icon: Icons.search_rounded, onTap: () {}),
         const SizedBox(width: 6),
