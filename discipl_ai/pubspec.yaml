@@ -1,0 +1,52 @@
+name: discipl_ai
+description: DISCIPL.AI - AI-Powered Discipline Engine
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  provider: ^6.1.1
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # HTTP & API
+  http: ^1.2.0
+
+  # Local Storage
+  shared_preferences: ^2.2.2
+
+  # Charts
+  fl_chart: ^0.67.0
+
+  # Image picker (Progress Photos feature)
+  image_picker: ^1.0.7
+
+  # Native share (Community feed share button)
+  share_plus: ^9.0.0
+
+  # Fonts — Poppins (display) + Inter (body)
+  google_fonts: ^6.2.1
+
+  # Utilities
+  intl: ^0.19.0
+  uuid: ^4.3.3
+  equatable: ^2.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/
+    - assets/images/

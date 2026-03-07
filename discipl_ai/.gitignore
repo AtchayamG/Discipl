@@ -1,0 +1,96 @@
+# ===============================
+# General
+# ===============================
+*.class
+*.log
+*.pyc
+*.swp
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# ===============================
+# IDE / Editor
+# ===============================
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# ===============================
+# Build / Generated
+# ===============================
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# ===============================
+# Flutter / Dart
+# ===============================
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.pub-cache/
+.pub/
+
+# ===============================
+# Android
+# ===============================
+/android/.gradle
+/android/local.properties
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ===============================
+# iOS / macOS
+# ===============================
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.podspec
+**/macos/Flutter/ephemeral/
+
+# ===============================
+# Linux / Windows Generated
+# ===============================
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+
+# ===============================
+# Symbolication / Obfuscation
+# ===============================
+app.*.symbols
+app.*.map.json
+
+# ===============================
+# Large files (IMPORTANT)
+# ===============================
+*.zip
+*.rar
+*.7z
+*.apk
+*.aab
+*.ipa
+*.tar
+*.gz
+
+# ===============================
+# Cache / Temporary
+# ===============================
+.history/
+.build/
+.buildlog/
+
+# ===============================
+# Version control leftovers
+# ===============================
+.svn/
+.swiftpm/
+
+# ===============================
+# Misc
+# ===============================
+migrate_working_dir/

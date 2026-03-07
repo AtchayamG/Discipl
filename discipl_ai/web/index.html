@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="DISCIPL.AI — Build. Track. Transform.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Discipl.AI">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Discipl.AI</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0A0A0A;
+      --lime:    #C8F135;
+      --teal:    #4EC9B0;
+      --muted:   #6B7280;
+      --surface: #1A1A1A;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Flutter renders here — ALWAYS visible, full size, behind overlay */
+    #app {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── Splash overlay — sits on TOP of Flutter ─────────────────────────── */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;          /* always on top until dismissed */
+      opacity: 1;
+      transition: opacity 0.6s ease;
+    }
+    #splash.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ── Radial glow ─────────────────────────────────────────────────────── */
+    .glow {
+      position: absolute;
+      width: 440px; height: 440px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,241,53,0.10) 0%, transparent 70%);
+      animation: glowPulse 2.2s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes glowPulse {
+      from { transform: scale(0.9); opacity: 0.6; }
+      to   { transform: scale(1.1); opacity: 1.0; }
+    }
+
+    /* ── Particles ───────────────────────────────────────────────────────── */
+    .particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .p {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--lime);
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 0;   transform: translateY(0)      scale(1);   }
+      15%  { opacity: 0.5; }
+      85%  { opacity: 0.2; }
+      100% { opacity: 0;   transform: translateY(-110px) scale(0.3); }
+    }
+
+    /* ── Content ─────────────────────────────────────────────────────────── */
+    .content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: popIn 0.9s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(22px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    /* ── App icon ────────────────────────────────────────────────────────── */
+    .icon-wrap { position: relative; margin-bottom: 28px; }
+    .icon-glow {
+      position: absolute;
+      inset: -20px;
+      border-radius: 56px;
+      background: radial-gradient(circle, rgba(200,241,53,0.30) 0%, transparent 68%);
+      animation: glowPulse 2.2s ease-in-out infinite alternate;
+    }
+    .icon-box {
+      position: relative;
+      width: 160px; height: 160px;
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow:
+        0 0 50px rgba(200,241,53,0.28),
+        0 14px 40px rgba(0,0,0,0.65);
+    }
+    .icon-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ── Brand ───────────────────────────────────────────────────────────── */
+    .brand {
+      font-size: 32px; font-weight: 900;
+      color: #fff; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      animation: fadeUp 0.6s ease 0.85s both;
+    }
+    .brand .lime { color: var(--lime); }
+
+    .tagline {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 3.2px; color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 42px;
+      animation: fadeUp 0.6s ease 1.05s both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ── Progress bar ────────────────────────────────────────────────────── */
+    .prog-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 11px;
+      animation: fadeUp 0.6s ease 1.25s both;
+    }
+    .track { width: 160px; height: 3px; background: var(--surface); border-radius: 4px; overflow: hidden; }
+    .fill  {
+      height: 100%; width: 0%; border-radius: 4px;
+      background: linear-gradient(90deg, #C8F135, #a8e020);
+      box-shadow: 0 0 10px rgba(200,241,53,0.55);
+      transition: width 80ms linear;
+    }
+    .lbl { font-size: 11px; color: var(--muted); letter-spacing: 0.3px; min-height: 15px; }
+
+    /* ── Scan line ───────────────────────────────────────────────────────── */
+    .scan {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--lime) 30%, var(--teal) 70%, transparent 100%);
+      animation: scanPulse 3s ease-in-out infinite;
+    }
+    @keyframes scanPulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1.0; } }
+  </style>
+</head>
+<body>
+
+  <!-- Flutter renders here — always visible, full viewport, behind splash -->
+  <div id="app"></div>
+
+  <!-- Splash overlay on top — dismissed after exactly 3 seconds -->
+  <div id="splash">
+    <div class="glow"></div>
+    <div class="particles" id="pts"></div>
+
+    <div class="content">
+      <div class="icon-wrap">
+        <div class="icon-glow"></div>
+        <div class="icon-box">
+          <img src="icons/Icon-512.png" alt="Discipl.AI">
+        </div>
+      </div>
+
+      <div class="brand">Discipl<span class="lime">.</span>AI</div>
+      <div class="tagline">Build &nbsp;·&nbsp; Track &nbsp;·&nbsp; Transform</div>
+
+      <div class="prog-wrap">
+        <div class="track"><div class="fill" id="fill"></div></div>
+        <div class="lbl"  id="lbl">Initialising...</div>
+      </div>
+    </div>
+
+    <div class="scan"></div>
+  </div>
+
+  <script>
+    // ── Particles ─────────────────────────────────────────────────────────
+    (function() {
+      var c = document.getElementById('pts');
+      for (var i = 0; i < 22; i++) {
+        var p = document.createElement('div');
+        p.className = 'p';
+        p.style.cssText = [
+          'left:'             + (Math.random()*100)       + 'vw',
+          'top:'              + (20+Math.random()*60)     + 'vh',
+          'width:'            + (Math.random()*2+1)       + 'px',
+          'height:'           + (Math.random()*2+1)       + 'px',
+          'animation-duration:'+(4+Math.random()*5)       + 's',
+          'animation-delay:'  + (Math.random()*4)         + 's',
+        ].join(';');
+        c.appendChild(p);
+      }
+    })();
+
+    // ── 3-second progress bar — dismisses splash automatically after 3s ───
+    // Does NOT wait for Flutter callback — avoids getting stuck.
+    var DURATION  = 3000;
+    var fillEl    = document.getElementById('fill');
+    var lblEl     = document.getElementById('lbl');
+    var LABELS    = ['Initialising...', 'Loading your profile...', 'Almost ready...'];
+    var startTime = null;
+
+    function tick(ts) {
+      if (!startTime) startTime = ts;
+      var pct = Math.min((ts - startTime) / DURATION, 1.0);
+      fillEl.style.width = (pct * 100) + '%';
+      lblEl.textContent  = pct < 0.33 ? LABELS[0] : pct < 0.66 ? LABELS[1] : LABELS[2];
+      if (pct < 1.0) {
+        requestAnimationFrame(tick);
+      } else {
+        // 3 seconds done — fade out and remove splash
+        var splash = document.getElementById('splash');
+        splash.classList.add('hide');
+        setTimeout(function() { splash.remove(); }, 700);
+      }
+    }
+    requestAnimationFrame(tick);
+  </script>
+
+  <!-- Flutter bootstrap — loads independently, renders into #app -->
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
