@@ -115,6 +115,8 @@ class _TopBar extends StatelessWidget {
 }
 
 // ─── Collapsible rail ─────────────────────────────────────────────────────────
+// Uses SizedBox (not AnimatedContainer with decoration) so width is a hard
+// layout constraint — children physically cannot overflow it.
 class _Rail extends StatelessWidget {
   final bool expanded;
   final VoidCallback onToggle;
@@ -126,60 +128,106 @@ class _Rail extends StatelessWidget {
     final provider = context.watch<AppProvider>();
     final w = expanded ? AppSizes.railExpanded : AppSizes.railCollapsed;
 
-    return AnimatedContainer(
+    return AnimatedSize(
       duration: const Duration(milliseconds: 240),
       curve: Curves.easeInOut,
-      width: w,
-      decoration: BoxDecoration(
-        color: tc.railBg,
-        border: Border(right: BorderSide(color: tc.border)),
-        boxShadow: tc.isDark ? [] : [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
-      ),
-      child: Stack(clipBehavior: Clip.none, children: [
-        Column(children: [
-          const SizedBox(height: 16),
-          ..._navItems.asMap().entries.map((e) {
-            final idx = e.key;
-            final item = e.value;
-            return _RailItem(item: item, isActive: provider.selectedIndex == idx, expanded: expanded, onTap: () => provider.navigate(idx));
-          }),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(13, 0, 13, 16),
-            child: Row(children: [
-              _AppIconBox(size: 34, radius: 50, isAvatar: true),
-              if (expanded) ...[
-                const SizedBox(width: 9),
-                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Demo User', style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 12, fontWeight: FontWeight.w700, color: tc.textPrimary), overflow: TextOverflow.ellipsis),
-                  Text('Score: 847', style: TextStyle(fontFamily: AppTypography.bodyFont, fontSize: 10, color: tc.textMuted)),
-                ])),
-              ],
-            ]),
+      child: SizedBox(
+        width: w,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: tc.railBg,
+            border: Border(right: BorderSide(color: tc.border)),
+            boxShadow: tc.isDark ? [] : [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
           ),
-        ]),
-        // Toggle button
-        Positioned(
-          top: 16, right: -13,
-          child: GestureDetector(
-            onTap: onToggle,
-            child: Container(
-              width: 26, height: 26,
-              decoration: BoxDecoration(
-                color: tc.cardBg2,
-                shape: BoxShape.circle,
-                border: Border.all(color: tc.border2),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(tc.isDark ? 0.5 : 0.12), blurRadius: 8, offset: const Offset(0, 2))],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+
+              // ── Toggle button ────────────────────────────────────────────
+              InkWell(
+                onTap: onToggle,
+                child: SizedBox(
+                  height: 48,
+                  width: w,
+                  child: Row(children: [
+                    if (expanded) ...[
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text('MENU',
+                          style: TextStyle(
+                            fontFamily: AppTypography.displayFont,
+                            fontSize: 10, fontWeight: FontWeight.w700,
+                            color: tc.textMuted, letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                    ] else
+                      const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Container(
+                        width: 30, height: 30,
+                        decoration: BoxDecoration(
+                          color: const Color(AppColors.lime).withOpacity(0.13),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: const Color(AppColors.lime).withOpacity(0.45)),
+                        ),
+                        child: Icon(
+                          expanded
+                            ? Icons.keyboard_double_arrow_left_rounded
+                            : Icons.keyboard_double_arrow_right_rounded,
+                          size: 17,
+                          color: const Color(AppColors.lime),
+                        ),
+                      ),
+                    ),
+                  ]),
+                ),
               ),
-              child: Center(child: Text(expanded ? '‹' : '›', style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 14, fontWeight: FontWeight.w800, color: tc.textMuted, height: 1))),
-            ),
+
+              // ── Nav items ───────────────────────────────────────────────
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: _navItems.length,
+                  itemBuilder: (_, idx) => _RailItem(
+                    item: _navItems[idx],
+                    isActive: provider.selectedIndex == idx,
+                    expanded: expanded,
+                    onTap: () => provider.navigate(idx),
+                  ),
+                ),
+              ),
+
+              // ── Bottom user row ──────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.fromLTRB(13, 0, 13, 16),
+                child: Row(children: [
+                  _AppIconBox(size: 34, radius: 50, isAvatar: true),
+                  if (expanded) ...[
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text('Demo User',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 12, fontWeight: FontWeight.w700, color: tc.textPrimary)),
+                        Text('Score: 847',
+                          style: TextStyle(fontFamily: AppTypography.bodyFont, fontSize: 10, color: tc.textMuted)),
+                      ]),
+                    ),
+                  ],
+                ]),
+              ),
+
+            ],
           ),
         ),
-      ]),
+      ),
     );
   }
 }
 
+// ─── Rail item ────────────────────────────────────────────────────────────────
 class _RailItem extends StatelessWidget {
   final _NavItemData item;
   final bool isActive, expanded;
@@ -189,13 +237,13 @@ class _RailItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tc = TC.of(context);
-    final limeColor = tc.isDark ? const Color(AppColors.lime) : const Color(AppColors.limeLight);
-    return GestureDetector(
+    final lime = tc.isDark ? const Color(AppColors.lime) : const Color(AppColors.limeLight);
+    return InkWell(
       onTap: onTap,
-      child: Container(
-        height: 46,
-        margin: const EdgeInsets.symmetric(vertical: 1),
+      child: SizedBox(
+        height: 44,
         child: Row(children: [
+          // Icon box — always 68px total (13 + 42 + 13)
           Container(
             width: 42, height: 42,
             margin: const EdgeInsets.symmetric(horizontal: 13),
@@ -204,15 +252,21 @@ class _RailItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(11),
             ),
             child: Stack(children: [
-              Center(child: Icon(item.icon, size: 18, color: isActive ? limeColor : tc.textMuted)),
+              Center(child: Icon(item.icon, size: 18, color: isActive ? lime : tc.textMuted)),
               if (isActive)
                 Positioned(left: 0, top: 10, bottom: 10,
-                  child: Container(width: 3, decoration: BoxDecoration(color: limeColor, borderRadius: BorderRadius.circular(2)))),
+                  child: Container(width: 3,
+                    decoration: BoxDecoration(color: lime, borderRadius: BorderRadius.circular(2)))),
             ]),
           ),
+          // Label — only when expanded, Expanded widget fills remaining space
           if (expanded)
-            Expanded(child: Text(item.label, style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 13, fontWeight: FontWeight.w600,
-              color: isActive ? limeColor : tc.textMuted), overflow: TextOverflow.ellipsis)),
+            Expanded(
+              child: Text(item.label,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 13,
+                  fontWeight: FontWeight.w600, color: isActive ? lime : tc.textMuted)),
+            ),
         ]),
       ),
     );
@@ -228,9 +282,7 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final tc = TC.of(context);
     final lp = context.watch<LanguageProvider>();
-    final limeColor = tc.isDark ? const Color(AppColors.lime) : const Color(AppColors.limeLight);
-
-    // Translated labels for the 5 bottom nav tabs
+    final lime = tc.isDark ? const Color(AppColors.lime) : const Color(AppColors.limeLight);
     final tabLabels = [lp.dashboard, lp.habits, lp.workouts, lp.community, lp.profile];
 
     return Container(
@@ -255,13 +307,13 @@ class _BottomNav extends StatelessWidget {
                   onTap: () => provider.navigate(screenIdx),
                   behavior: HitTestBehavior.opaque,
                   child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Icon(item.icon, size: 22, color: isActive ? limeColor : tc.textMuted),
+                    Icon(item.icon, size: 22, color: isActive ? lime : tc.textMuted),
                     const SizedBox(height: 3),
-                    Text(label, style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 9, fontWeight: FontWeight.w600,
-                      color: isActive ? limeColor : tc.textMuted)),
+                    Text(label, style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 9,
+                      fontWeight: FontWeight.w600, color: isActive ? lime : tc.textMuted)),
                     if (isActive)
                       Container(margin: const EdgeInsets.only(top: 3), width: 4, height: 4,
-                        decoration: BoxDecoration(color: limeColor, shape: BoxShape.circle)),
+                        decoration: BoxDecoration(color: lime, shape: BoxShape.circle)),
                   ]),
                 ),
               );
@@ -296,11 +348,13 @@ class _IconBtn extends StatelessWidget {
         child: Stack(children: [
           Center(child: Icon(icon, size: 16, color: tc.textMuted)),
           if (badge != null)
-            Positioned(right: 4, top: 4, child: Container(
-              width: 14, height: 14,
-              decoration: const BoxDecoration(color: Color(AppColors.red), shape: BoxShape.circle),
-              child: Center(child: Text('$badge', style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: Colors.white, height: 1))),
-            )),
+            Positioned(right: 4, top: 4,
+              child: Container(
+                width: 14, height: 14,
+                decoration: const BoxDecoration(color: Color(AppColors.red), shape: BoxShape.circle),
+                child: Center(child: Text('$badge',
+                  style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: Colors.white, height: 1))),
+              )),
         ]),
       ),
     );
@@ -327,7 +381,8 @@ class _AppIconBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius - 1),
         child: Image.asset('assets/images/app_icon.png', fit: BoxFit.cover, width: size, height: size,
           errorBuilder: (_, __, ___) => Center(child: Text('D',
-            style: TextStyle(fontFamily: AppTypography.displayFont, fontWeight: FontWeight.w900, fontSize: size * 0.5, color: const Color(AppColors.lime))))),
+            style: TextStyle(fontFamily: AppTypography.displayFont, fontWeight: FontWeight.w900,
+              fontSize: size * 0.5, color: const Color(AppColors.lime))))),
       ),
     );
   }

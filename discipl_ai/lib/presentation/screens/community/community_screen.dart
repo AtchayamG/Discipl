@@ -152,6 +152,14 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
         if (_filtered.isEmpty)
           const EmptyState(emoji: '🏋️', title: 'No posts yet', subtitle: 'Nothing here yet — check back soon')
+        else if (Responsive.isWide(context))
+          // Desktop: 2-column masonry-style grid
+          _PostGrid(
+            posts: _filtered,
+            liked: _liked,
+            onLike: _toggleLike,
+            onTap: _openPost,
+          )
         else
           Column(children: _filtered.map((p) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
@@ -200,12 +208,14 @@ class _PostCard extends StatelessWidget {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSizes.radiusLg)),
               child: imageUrl != null
-                  ? Image.network(imageUrl, height: 180, width: double.infinity, fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => _Fallback(initials: initials),
-                      loadingBuilder: (_, child, prog) => prog == null ? child
-                          : Container(height: 180, color: TC.of(context).cardBg2,
-                              child: Center(child: CircularProgressIndicator(
-                                  strokeWidth: 2, color: TC.of(context).lime))))
+                  ? AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Image.network(imageUrl, width: double.infinity, fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _Fallback(initials: initials),
+                        loadingBuilder: (_, child, prog) => prog == null ? child
+                            : Container(color: TC.of(context).cardBg2,
+                                child: Center(child: CircularProgressIndicator(
+                                    strokeWidth: 2, color: TC.of(context).lime)))))
                   : _Fallback(initials: initials),
             ),
             if (isTrending)
@@ -316,14 +326,76 @@ class _ShareButtonState extends State<_ShareButton> {
   );
 }
 
+// ─── Desktop 2-column post grid ──────────────────────────────────────────────
+class _PostGrid extends StatelessWidget {
+  final List<Map<String, dynamic>> posts;
+  final Set<String> liked;
+  final void Function(String) onLike;
+  final void Function(Map<String, dynamic>) onTap;
+
+  const _PostGrid({
+    required this.posts,
+    required this.liked,
+    required this.onLike,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Split posts into two columns for a balanced masonry feel
+    final left  = <Map<String, dynamic>>[];
+    final right = <Map<String, dynamic>>[];
+    for (int i = 0; i < posts.length; i++) {
+      if (i.isEven) left.add(posts[i]);
+      else          right.add(posts[i]);
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: _PostColumn(posts: left,  liked: liked, onLike: onLike, onTap: onTap)),
+        const SizedBox(width: 12),
+        Expanded(child: _PostColumn(posts: right, liked: liked, onLike: onLike, onTap: onTap)),
+      ],
+    );
+  }
+}
+
+class _PostColumn extends StatelessWidget {
+  final List<Map<String, dynamic>> posts;
+  final Set<String> liked;
+  final void Function(String) onLike;
+  final void Function(Map<String, dynamic>) onTap;
+
+  const _PostColumn({
+    required this.posts,
+    required this.liked,
+    required this.onLike,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: posts.map((p) => Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: _PostCard(
+        post: p,
+        isLiked: liked.contains(p['id']),
+        onLike: () => onLike(p['id'] as String),
+        onTap: () => onTap(p),
+      ),
+    )).toList());
+  }
+}
+
 class _Fallback extends StatelessWidget {
   final String initials;
   const _Fallback({required this.initials});
   @override
-  Widget build(BuildContext context) => Container(height: 180, width: double.infinity,
+  Widget build(BuildContext context) => AspectRatio(aspectRatio: 16/9, child: Container(width: double.infinity,
     color: TC.of(context).cardBg2,
     child: Center(child: Text(initials,
-      style: TextStyle(fontSize: 48, color: const Color(AppColors.lime).withOpacity(0.3)))));
+      style: TextStyle(fontSize: 48, color: const Color(AppColors.lime).withOpacity(0.3))))));
 }
 
 // ─── Post detail screen ───────────────────────────────────────────────────────
@@ -336,13 +408,15 @@ class _PostDetailScreen extends StatefulWidget {
   State<_PostDetailScreen> createState() => _PostDetailScreenState();
 }
 
-class _PostDetailScreenState extends State<_PostDetailScreen> {
+class _PostDetailScreenState extends State<_PostDetailScreen> with SingleTickerProviderStateMixin {
   late bool _liked;
   bool _sharing = false;
-  final _ctrl = TextEditingController();
+  final _ctrl      = TextEditingController();
   final _focusNode = FocusNode();
   final _scrollCtrl = ScrollController();
   late List<Map<String, dynamic>> _comments;
+  late AnimationController _animCtrl;
+  late Animation<double> _fadeAnim;
 
   @override
   void initState() {
@@ -350,6 +424,9 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
     _liked = widget.isLiked;
     _comments = List<Map<String, dynamic>>.from(
       (widget.post['commentList'] as List?)?.map((e) => Map<String, dynamic>.from(e as Map)) ?? []);
+    _animCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _fadeAnim = CurvedAnimation(parent: _animCtrl, curve: Curves.easeOut);
+    _animCtrl.forward();
   }
 
   @override
@@ -357,11 +434,10 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
     _ctrl.dispose();
     _focusNode.dispose();
     _scrollCtrl.dispose();
+    _animCtrl.dispose();
     super.dispose();
   }
 
-  // Dismiss keyboard and unfocus before popping — prevents numeric keyboard
-  // from bleeding into the parent community screen on back navigation.
   void _goBack() {
     _focusNode.unfocus();
     FocusScope.of(context).unfocus();
@@ -375,15 +451,13 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
       _comments.add({'user': 'You', 'text': t});
       _ctrl.clear();
     });
-    // Dismiss keyboard after sending
     _focusNode.unfocus();
     FocusScope.of(context).unfocus();
-    // Scroll to bottom after frame renders so new comment is visible
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollCtrl.hasClients) {
         _scrollCtrl.animateTo(
           _scrollCtrl.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 350),
           curve: Curves.easeOut,
         );
       }
@@ -392,149 +466,308 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final tc       = TC.of(context);
     final post     = widget.post;
     final name     = post['userName'] as String? ?? 'User';
     final text     = post['text'] as String? ?? '';
     final likes    = (post['likes'] as int? ?? 0) + (_liked ? 1 : 0);
     final imageUrl = post['imageUrl'] as String?;
     final tag      = post['tag'] as String?;
+    final isTrending = post['isTrending'] as bool? ?? false;
     final initials = post['initials'] as String? ?? name.substring(0, 1);
 
     return Scaffold(
-      // resizeToAvoidBottomInset:true shifts the whole body up when keyboard opens
-      resizeToAvoidBottomInset: true,
-      backgroundColor: TC.of(context).pageBg,
-      appBar: AppBar(
-        backgroundColor: TC.of(context).cardBg,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
-          color: TC.of(context).textPrimary,
-          // Use _goBack to dismiss keyboard + unfocus before leaving
-          onPressed: _goBack,
-        ),
-        title: Text(name, style: TextStyle(fontFamily: AppTypography.displayFont,
-            fontSize: 16, fontWeight: FontWeight.w700, color: TC.of(context).textPrimary)),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.ios_share_outlined, size: 18),
-            color: _sharing ? const Color(AppColors.lime) : const Color(AppColors.textMuted),
-            onPressed: _sharing ? null : () async {
-              setState(() => _sharing = true);
-              try { await Share.share(text); } finally {
-                if (mounted) setState(() => _sharing = false);
-              }
-            },
-          ),
-        ],
-      ),
+      backgroundColor: tc.pageBg,
       body: Column(children: [
+        // ── Scrollable content ───────────────────────────────────────────
         Expanded(
-          child: SingleChildScrollView(
-            controller: _scrollCtrl,
-            // Tap outside comment box dismisses keyboard
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Column(children: [
-              if (imageUrl != null)
-                Image.network(
-                  imageUrl,
-                  width: double.infinity,
-                  height: 280,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _Fallback(initials: initials),
-                ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  // Author row
-                  Row(children: [
-                    CircleAvatar(
-                      radius: 18,
-                      backgroundColor: const Color(AppColors.limeAlpha20),
-                      child: Text(initials, style: TextStyle(
-                          fontFamily: AppTypography.displayFont,
-                          fontSize: 12, fontWeight: FontWeight.w700,
-                          color: TC.of(context).lime)),
+          child: FadeTransition(
+            opacity: _fadeAnim,
+            child: CustomScrollView(
+              controller: _scrollCtrl,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              slivers: [
+
+                // ── Hero image with overlaid appbar ──────────────────────
+                SliverAppBar(
+                  expandedHeight: 320,
+                  pinned: true,
+                  backgroundColor: tc.cardBg,
+                  elevation: 0,
+                  leading: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: GestureDetector(
+                      onTap: _goBack,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.45),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white.withOpacity(0.15)),
+                        ),
+                        child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: Colors.white),
+                      ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(child: Text(name, style: TextStyle(
-                        fontFamily: AppTypography.displayFont,
-                        fontSize: 14, fontWeight: FontWeight.w700,
-                        color: TC.of(context).textPrimary))),
-                    if (tag != null) DPill(tag),
-                  ]),
-                  const SizedBox(height: 12),
-                  Text(text, style: TextStyle(
-                      fontFamily: AppTypography.bodyFont,
-                      fontSize: 14, color: TC.of(context).textMuted, height: 1.6)),
-                  const SizedBox(height: 14),
-                  // Like / comment counts
-                  Row(children: [
-                    GestureDetector(
-                      onTap: () { setState(() => _liked = !_liked); widget.onLike(); },
-                      child: Row(children: [
-                        Icon(_liked ? Icons.favorite : Icons.favorite_border,
-                            size: 18, color: _liked ? Colors.red : const Color(AppColors.textMuted)),
-                        const SizedBox(width: 4),
-                        Text('$likes', style: TextStyle(
-                            fontSize: 13,
-                            color: _liked ? Colors.red : const Color(AppColors.textMuted))),
-                      ]),
-                    ),
-                    const SizedBox(width: 16),
-                    Row(children: [
-                      Icon(Icons.chat_bubble_outline, size: 16, color: TC.of(context).textMuted),
-                      const SizedBox(width: 4),
-                      Text('${_comments.length}', style: TextStyle(
-                          fontSize: 13, color: TC.of(context).textMuted)),
-                    ]),
-                  ]),
-                  const SizedBox(height: 20),
-                  Divider(color: TC.of(context).border),
-                  const SizedBox(height: 12),
-                  Text('Comments (${_comments.length})', style: TextStyle(
-                      fontFamily: AppTypography.displayFont,
-                      fontSize: 13, fontWeight: FontWeight.w700,
-                      color: TC.of(context).textPrimary)),
-                  const SizedBox(height: 10),
-                  // Comments list
-                  ..._comments.map((c) => Padding(
-                    padding: const EdgeInsets.only(bottom: 14),
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      CircleAvatar(
-                        radius: 14,
-                        backgroundColor: c['user'] == 'You'
-                            ? const Color(AppColors.limeAlpha20)
-                            : TC.of(context).surfaceBg,
-                        child: Text(
-                          (c['user'] as String).substring(0, 1),
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: c['user'] == 'You'
-                                ? TC.of(context).lime
-                                : TC.of(context).textMuted,
+                  ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: GestureDetector(
+                        onTap: _sharing ? null : () async {
+                          setState(() => _sharing = true);
+                          try { await Share.share(text); } finally {
+                            if (mounted) setState(() => _sharing = false);
+                          }
+                        },
+                        child: Container(
+                          width: 36, height: 36,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.45),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white.withOpacity(0.15)),
                           ),
+                          child: Icon(Icons.ios_share_outlined, size: 16,
+                            color: _sharing ? const Color(AppColors.lime) : Colors.white),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(c['user'] as String, style: TextStyle(
+                    ),
+                  ],
+                  flexibleSpace: FlexibleSpaceBar(
+                    collapseMode: CollapseMode.parallax,
+                    background: imageUrl != null
+                      ? Stack(fit: StackFit.expand, children: [
+                          Image.network(imageUrl, fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => _Fallback(initials: initials)),
+                          // Bottom fade gradient
+                          Positioned(
+                            bottom: 0, left: 0, right: 0, height: 120,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter, end: Alignment.bottomCenter,
+                                  colors: [Colors.transparent, tc.pageBg.withOpacity(0.95)],
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Trending badge
+                          if (isTrending)
+                            Positioned(top: 56, right: 16,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: const Color(AppColors.orange),
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [BoxShadow(color: const Color(AppColors.orange).withOpacity(0.4), blurRadius: 12)],
+                                ),
+                                child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                                  Icon(Icons.trending_up_rounded, size: 12, color: Colors.white),
+                                  SizedBox(width: 4),
+                                  Text('Trending', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white)),
+                                ]),
+                              ),
+                            ),
+                        ])
+                      : _Fallback(initials: initials),
+                  ),
+                ),
+
+                // ── Post body ────────────────────────────────────────────
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+                      // Author row
+                      Row(children: [
+                        Container(
+                          width: 44, height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(AppColors.limeAlpha20),
+                            border: Border.all(color: const Color(AppColors.lime).withOpacity(0.4), width: 2),
+                            boxShadow: [BoxShadow(color: const Color(AppColors.lime).withOpacity(0.15), blurRadius: 10)],
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(initials, style: TextStyle(
                             fontFamily: AppTypography.displayFont,
-                            fontSize: 11, fontWeight: FontWeight.w700,
-                            color: TC.of(context).textPrimary)),
-                        const SizedBox(height: 2),
-                        Text(c['text'] as String, style: TextStyle(
-                            fontFamily: AppTypography.bodyFont,
-                            fontSize: 13, color: TC.of(context).textMuted, height: 1.4)),
-                      ])),
+                            fontSize: 15, fontWeight: FontWeight.w800, color: tc.lime)),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(name, style: TextStyle(
+                              fontFamily: AppTypography.displayFont,
+                              fontSize: 15, fontWeight: FontWeight.w700, color: tc.textPrimary)),
+                            Text('Community Member', style: TextStyle(
+                              fontFamily: AppTypography.bodyFont,
+                              fontSize: 11, color: tc.textMuted)),
+                          ]),
+                        ),
+                        if (tag != null) _TagBadge(tag: tag),
+                      ]),
+                      const SizedBox(height: 16),
+
+                      // Post text
+                      Text(text, style: TextStyle(
+                        fontFamily: AppTypography.bodyFont,
+                        fontSize: 15, color: tc.textPrimary, height: 1.65,
+                        letterSpacing: 0.1,
+                      )),
+                      const SizedBox(height: 20),
+
+                      // Like / comment action row
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: tc.cardBg,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: tc.border),
+                        ),
+                        child: Row(children: [
+                          // Like
+                          GestureDetector(
+                            onTap: () { setState(() => _liked = !_liked); widget.onLike(); },
+                            child: Row(children: [
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                child: Icon(
+                                  _liked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                                  key: ValueKey(_liked),
+                                  size: 22,
+                                  color: _liked ? Colors.redAccent : tc.textMuted,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text('$likes', style: TextStyle(
+                                fontFamily: AppTypography.displayFont,
+                                fontSize: 14, fontWeight: FontWeight.w600,
+                                color: _liked ? Colors.redAccent : tc.textMuted)),
+                            ]),
+                          ),
+                          const SizedBox(width: 24),
+                          // Comments
+                          Row(children: [
+                            Icon(Icons.chat_bubble_outline_rounded, size: 20, color: tc.textMuted),
+                            const SizedBox(width: 6),
+                            Text('${_comments.length}', style: TextStyle(
+                              fontFamily: AppTypography.displayFont,
+                              fontSize: 14, fontWeight: FontWeight.w600, color: tc.textMuted)),
+                          ]),
+                          const Spacer(),
+                          // Focus comment field
+                          GestureDetector(
+                            onTap: () => _focusNode.requestFocus(),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                              decoration: BoxDecoration(
+                                color: const Color(AppColors.lime).withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: const Color(AppColors.lime).withOpacity(0.35)),
+                              ),
+                              child: const Row(mainAxisSize: MainAxisSize.min, children: [
+                                Icon(Icons.add_comment_outlined, size: 14, color: Color(AppColors.lime)),
+                                SizedBox(width: 5),
+                                Text('Comment', style: TextStyle(
+                                  fontFamily: AppTypography.displayFont,
+                                  fontSize: 11, fontWeight: FontWeight.w700, color: Color(AppColors.lime))),
+                              ]),
+                            ),
+                          ),
+                        ]),
+                      ),
+                      const SizedBox(height: 28),
+
+                      // Comments section header
+                      Row(children: [
+                        Container(width: 3, height: 18,
+                          decoration: BoxDecoration(
+                            color: const Color(AppColors.lime),
+                            borderRadius: BorderRadius.circular(2))),
+                        const SizedBox(width: 10),
+                        Text('Comments', style: TextStyle(
+                          fontFamily: AppTypography.displayFont,
+                          fontSize: 15, fontWeight: FontWeight.w800, color: tc.textPrimary)),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(AppColors.lime).withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text('${_comments.length}', style: const TextStyle(
+                            fontFamily: AppTypography.displayFont,
+                            fontSize: 11, fontWeight: FontWeight.w700, color: Color(AppColors.lime))),
+                        ),
+                      ]),
+                      const SizedBox(height: 16),
+
+                      // Comments list
+                      ..._comments.asMap().entries.map((entry) {
+                        final c = entry.value;
+                        final isMe = c['user'] == 'You';
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Container(
+                              width: 34, height: 34,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isMe
+                                  ? const Color(AppColors.lime).withOpacity(0.15)
+                                  : tc.surfaceBg,
+                                border: Border.all(
+                                  color: isMe
+                                    ? const Color(AppColors.lime).withOpacity(0.4)
+                                    : tc.border, width: 1.5),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                (c['user'] as String).substring(0, 1),
+                                style: TextStyle(
+                                  fontFamily: AppTypography.displayFont,
+                                  fontSize: 12, fontWeight: FontWeight.w800,
+                                  color: isMe ? const Color(AppColors.lime) : tc.textMuted)),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: isMe
+                                    ? const Color(AppColors.lime).withOpacity(0.07)
+                                    : tc.cardBg,
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                  border: Border.all(
+                                    color: isMe
+                                      ? const Color(AppColors.lime).withOpacity(0.2)
+                                      : tc.border),
+                                ),
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                  Text(c['user'] as String, style: TextStyle(
+                                    fontFamily: AppTypography.displayFont,
+                                    fontSize: 12, fontWeight: FontWeight.w700,
+                                    color: isMe ? const Color(AppColors.lime) : tc.textPrimary)),
+                                  const SizedBox(height: 3),
+                                  Text(c['text'] as String, style: TextStyle(
+                                    fontFamily: AppTypography.bodyFont,
+                                    fontSize: 13, color: tc.textMuted, height: 1.4)),
+                                ]),
+                              ),
+                            ),
+                          ]),
+                        );
+                      }),
+
+                      const SizedBox(height: 16),
                     ]),
-                  )),
-                  // Bottom padding so last comment is not hidden behind input bar
-                  const SizedBox(height: 8),
-                ]),
-              ),
-            ]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
 
@@ -542,31 +775,44 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
         SafeArea(
           top: false,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
             decoration: BoxDecoration(
-              color: TC.of(context).cardBg,
-              border: Border(top: BorderSide(color: TC.of(context).border)),
+              color: tc.cardBg,
+              border: Border(top: BorderSide(color: tc.border)),
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 12, offset: const Offset(0, -4))],
             ),
             child: Row(children: [
+              // Current user avatar
+              Container(
+                width: 32, height: 32,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(AppColors.limeAlpha20),
+                  border: Border.all(color: const Color(AppColors.lime).withOpacity(0.4)),
+                ),
+                alignment: Alignment.center,
+                child: Text('Y', style: TextStyle(
+                  fontFamily: AppTypography.displayFont,
+                  fontSize: 12, fontWeight: FontWeight.w800, color: tc.lime)),
+              ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: TC.of(context).cardBg2,
+                    color: tc.cardBg2,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: TC.of(context).border),
+                    border: Border.all(color: tc.border),
                   ),
                   child: TextField(
                     controller: _ctrl,
                     focusNode: _focusNode,
-                    // Force text keyboard — prevents numeric keyboard bleeding from
-                    // other screens staying in keyboard memory
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.send,
                     onSubmitted: (_) => _submit(),
-                    style: TextStyle(fontSize: 13, color: TC.of(context).textPrimary),
+                    style: TextStyle(fontSize: 13, color: tc.textPrimary),
                     decoration: InputDecoration(
-                      hintText: 'Add a comment...',
-                      hintStyle: TextStyle(color: TC.of(context).textMuted, fontSize: 13),
+                      hintText: 'Write a comment...',
+                      hintStyle: TextStyle(color: tc.textMuted, fontSize: 13),
                       filled: false,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -580,8 +826,12 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
               GestureDetector(
                 onTap: _submit,
                 child: Container(
-                  width: 40, height: 40,
-                  decoration: BoxDecoration(color: TC.of(context).lime, shape: BoxShape.circle),
+                  width: 38, height: 38,
+                  decoration: BoxDecoration(
+                    color: const Color(AppColors.lime),
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(color: const Color(AppColors.lime).withOpacity(0.35), blurRadius: 10)],
+                  ),
                   child: Icon(Icons.send_rounded, size: 16, color: TC.of(context).checkFg),
                 ),
               ),
@@ -589,6 +839,28 @@ class _PostDetailScreenState extends State<_PostDetailScreen> {
           ),
         ),
       ]),
+    );
+  }
+}
+
+// ─── Tag badge ────────────────────────────────────────────────────────────────
+class _TagBadge extends StatelessWidget {
+  final String tag;
+  const _TagBadge({required this.tag});
+
+  @override
+  Widget build(BuildContext context) {
+    final tc = TC.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(AppColors.lime).withOpacity(0.12),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(AppColors.lime).withOpacity(0.35)),
+      ),
+      child: Text(tag, style: const TextStyle(
+        fontFamily: AppTypography.displayFont,
+        fontSize: 11, fontWeight: FontWeight.w700, color: Color(AppColors.lime))),
     );
   }
 }
