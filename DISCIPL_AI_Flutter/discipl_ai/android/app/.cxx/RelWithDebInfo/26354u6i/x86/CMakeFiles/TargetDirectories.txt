@@ -1,2 +1,0 @@
-D:/Work/Claude/Discipl-ai/DISCIPL_AI_Flutter/discipl_ai/android/app/.cxx/RelWithDebInfo/26354u6i/x86/CMakeFiles/edit_cache.dir
-D:/Work/Claude/Discipl-ai/DISCIPL_AI_Flutter/discipl_ai/android/app/.cxx/RelWithDebInfo/26354u6i/x86/CMakeFiles/rebuild_cache.dir
