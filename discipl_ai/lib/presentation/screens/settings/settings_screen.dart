@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -99,6 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         child: ClipOval(
                           child: _AvatarImage(
                             avatarPath: avatarPath,
+                            avatarBytes: provider.webAvatarBytes,
                             name: name,
                             size: 64,
                           ),
@@ -112,15 +114,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     offset: const Offset(0, -28),
                     child: ElevatedButton.icon(
                       onPressed: () => _openEditProfile(context, name, bio),
-                      icon: const Icon(Icons.edit_outlined, size: 13),
-                      label: const Text('Edit Profile', style: TextStyle(fontSize: 11)),
+                      icon: const Icon(Icons.edit_rounded, size: 15),
+                      label: const Text('Edit Profile'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(AppColors.lime),
                         foregroundColor: const Color(AppColors.bg),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         elevation: 0,
+                        shadowColor: Colors.transparent,
+                        textStyle: const TextStyle(
+                          fontFamily: AppTypography.displayFont,
+                          fontSize: 13, fontWeight: FontWeight.w700),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppSizes.radiusMd),
                         ),
@@ -194,16 +197,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 icon: Icons.notifications_outlined,
                 iconBg: const Color(AppColors.limeAlpha12),
                 label: lp.notifications,
-                trailing: 'On',
-                onTap: () {},
+                trailing: provider.notificationSettings['pushEnabled'] == true ? 'On' : 'Off',
+                onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => _NotificationSettingsScreen(provider: provider))),
               ),
               _SettingsItem(
                 icon: Icons.lock_outline_rounded,
                 iconBg: const Color(0x1F3DD6C8),
                 iconColor: const Color(AppColors.teal),
                 label: lp.privacy,
-                trailing: 'Public',
-                onTap: () {},
+                trailing: (provider.privacySettings['profileVisibility'] as String? ?? 'public')
+                    .replaceFirst(RegExp(r'^.'), (provider.privacySettings['profileVisibility'] as String? ?? 'public')[0].toUpperCase()),
+                onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => _PrivacySettingsScreen(provider: provider))),
               ),
               _SettingsItem(
                 icon: Icons.palette_outlined,
@@ -485,15 +491,21 @@ class _HatchPainter extends CustomPainter {
 // ─────────────────────────────────────────────────────────────────────────────
 class _AvatarImage extends StatelessWidget {
   final String? avatarPath;
+  final Uint8List? avatarBytes; // web: bytes from readAsBytes()
   final String name;
   final double size;
-  const _AvatarImage({required this.avatarPath, required this.name, this.size = 72});
+  const _AvatarImage({required this.avatarPath, this.avatarBytes, required this.name, this.size = 72});
 
   @override
   Widget build(BuildContext context) {
     final tc = TC.of(context);
 
-    // 1 — user picked a file
+    // 1 — web: show bytes directly
+    if (kIsWeb && avatarBytes != null) {
+      return Image.memory(avatarBytes!, width: size, height: size, fit: BoxFit.cover);
+    }
+
+    // 2 — mobile: show file
     if (avatarPath != null && !kIsWeb) {
       final file = File(avatarPath!);
       if (file.existsSync()) {
@@ -501,7 +513,7 @@ class _AvatarImage extends StatelessWidget {
       }
     }
 
-    // 2 — default app icon
+    // 3 — default app icon
     return Image.asset(
       'assets/images/app_icon.png',
       width: size, height: size, fit: BoxFit.cover,
@@ -544,6 +556,7 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
   late final TextEditingController _nameCtrl;
   late final TextEditingController _bioCtrl;
   String? _pickedImagePath;
+  Uint8List? _pickedImageBytes; // used on web
   bool _saving = false;
 
   @override
@@ -565,14 +578,27 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
   Future<void> _pickImage(ImageSource source) async {
     try {
       final picker = ImagePicker();
+      // On web, camera is not supported — fall back to gallery
+      final effectiveSource = (kIsWeb && source == ImageSource.camera)
+          ? ImageSource.gallery
+          : source;
       final picked = await picker.pickImage(
-        source: source,
+        source: effectiveSource,
         imageQuality: 85,
         maxWidth: 512,
         maxHeight: 512,
       );
       if (picked != null) {
-        setState(() => _pickedImagePath = picked.path);
+        if (kIsWeb) {
+          // On web, picked.path is a blob URL — read bytes instead
+          final bytes = await picked.readAsBytes();
+          setState(() {
+            _pickedImageBytes = bytes;
+            _pickedImagePath = picked.path; // keep path for save logic
+          });
+        } else {
+          setState(() => _pickedImagePath = picked.path);
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -635,7 +661,7 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
                 icon: Icons.delete_outline_rounded,
                 label: 'Remove Photo',
                 color: const Color(AppColors.red),
-                onTap: () { Navigator.pop(context); setState(() => _pickedImagePath = null); },
+                onTap: () { Navigator.pop(context); setState(() { _pickedImagePath = null; _pickedImageBytes = null; }); },
               ),
             // Push content above system nav bar
             SizedBox(height: 16 + bottomPad),
@@ -657,11 +683,14 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
 
     setState(() => _saving = true);
 
-    await widget.provider.updateProfile({
-      'name': name,
-      'bio': _bioCtrl.text.trim(),
-      'avatarImagePath': _pickedImagePath ?? '',
-    });
+    await widget.provider.updateProfile(
+      {
+        'name': name,
+        'bio': _bioCtrl.text.trim(),
+        'avatarImagePath': _pickedImagePath ?? '',
+      },
+      webImageBytes: kIsWeb ? _pickedImageBytes : null,
+    );
 
     if (mounted) {
       setState(() => _saving = false);
@@ -734,16 +763,18 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
                     boxShadow: [BoxShadow(color: tc.lime.withOpacity(0.2), blurRadius: 12)],
                   ),
                   child: ClipOval(
-                    child: _pickedImagePath != null && !kIsWeb && File(_pickedImagePath!).existsSync()
-                        ? Image.file(File(_pickedImagePath!), fit: BoxFit.cover)
-                        : Image.asset('assets/images/app_icon.png', fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Center(
-                              child: Text(
-                                _nameCtrl.text.isNotEmpty ? _nameCtrl.text[0].toUpperCase() : 'D',
-                                style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 32, fontWeight: FontWeight.w800, color: tc.lime),
+                    child: kIsWeb && _pickedImageBytes != null
+                        ? Image.memory(_pickedImageBytes!, fit: BoxFit.cover)
+                        : _pickedImagePath != null && !kIsWeb && File(_pickedImagePath!).existsSync()
+                            ? Image.file(File(_pickedImagePath!), fit: BoxFit.cover)
+                            : Image.asset('assets/images/app_icon.png', fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Center(
+                                  child: Text(
+                                    _nameCtrl.text.isNotEmpty ? _nameCtrl.text[0].toUpperCase() : 'D',
+                                    style: TextStyle(fontFamily: AppTypography.displayFont, fontSize: 32, fontWeight: FontWeight.w800, color: tc.lime),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
                   ),
                 ),
                 // Camera badge
@@ -889,6 +920,344 @@ class _SourceTile extends StatelessWidget {
           Icon(Icons.chevron_right_rounded, size: 18, color: tc.textMuted2),
         ]),
       ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Notification Settings Screen
+// ─────────────────────────────────────────────────────────────────────────────
+class _NotificationSettingsScreen extends StatelessWidget {
+  final AppProvider provider;
+  const _NotificationSettingsScreen({required this.provider});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: provider,
+      child: Consumer<AppProvider>(builder: (context, prov, _) {
+        final s = prov.notificationSettings;
+        final tc = TC.of(context);
+        return Scaffold(
+          backgroundColor: tc.pageBg,
+          appBar: AppBar(
+            backgroundColor: tc.cardBg,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+              color: tc.textPrimary,
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: Text('Notifications',
+              style: TextStyle(fontFamily: AppTypography.displayFont,
+                fontSize: 16, fontWeight: FontWeight.w700, color: tc.textPrimary)),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Divider(height: 1, color: tc.border)),
+          ),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              _NSection('PUSH NOTIFICATIONS', [
+                _NTile(
+                  label: 'Push Notifications',
+                  subtitle: 'Receive notifications on this device',
+                  value: s['pushEnabled'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('pushEnabled', v),
+                  isMain: true,
+                ),
+              ]),
+              _NSection('ACTIVITY', [
+                _NTile(
+                  label: 'Streak Reminders',
+                  subtitle: 'Get reminded to keep your streak alive',
+                  value: s['streakReminders'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('streakReminders', v),
+                ),
+                _NTile(
+                  label: 'Habit Reminders',
+                  subtitle: 'Daily reminders for scheduled habits',
+                  value: s['habitReminders'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('habitReminders', v),
+                ),
+                _NTile(
+                  label: 'Workout Reminders',
+                  subtitle: 'Alerts for your workout schedule',
+                  value: s['workoutReminders'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('workoutReminders', v),
+                ),
+              ]),
+              _NSection('SOCIAL', [
+                _NTile(
+                  label: 'Community Activity',
+                  subtitle: 'Likes and comments on your posts',
+                  value: s['communityActivity'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('communityActivity', v),
+                ),
+                _NTile(
+                  label: 'Challenge Updates',
+                  subtitle: 'Progress and results from challenges',
+                  value: s['challengeUpdates'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('challengeUpdates', v),
+                ),
+              ]),
+              _NSection('INSIGHTS', [
+                _NTile(
+                  label: 'AI Insights',
+                  subtitle: 'Personalised tips and recommendations',
+                  value: s['aiInsights'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('aiInsights', v),
+                ),
+                _NTile(
+                  label: 'Weekly Report',
+                  subtitle: 'Your weekly performance summary',
+                  value: s['weeklyReport'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('weeklyReport', v),
+                ),
+                _NTile(
+                  label: 'Email Notifications',
+                  subtitle: 'Receive updates via email',
+                  value: s['emailEnabled'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('emailEnabled', v),
+                ),
+              ]),
+              _NSection('QUIET HOURS', [
+                _NTile(
+                  label: 'Quiet Hours',
+                  subtitle: 'Silence notifications from ${s['quietHoursStart']} to ${s['quietHoursEnd']}',
+                  value: s['quietHoursEnabled'] == true,
+                  onChanged: (v) => prov.setNotificationSetting('quietHoursEnabled', v),
+                ),
+              ]),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _NSection extends StatelessWidget {
+  final String title;
+  final List<Widget> tiles;
+  const _NSection(this.title, this.tiles);
+
+  @override
+  Widget build(BuildContext context) {
+    final tc = TC.of(context);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+        child: Text(title, style: TextStyle(
+          fontFamily: AppTypography.displayFont, fontSize: 11,
+          fontWeight: FontWeight.w700, color: tc.textMuted, letterSpacing: 1.1)),
+      ),
+      Container(
+        decoration: BoxDecoration(
+          color: tc.cardBg,
+          borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+          border: Border.all(color: tc.border),
+        ),
+        child: Column(children: [
+          for (int i = 0; i < tiles.length; i++) ...[
+            tiles[i],
+            if (i < tiles.length - 1) Divider(height: 1, indent: 16, color: tc.border),
+          ]
+        ]),
+      ),
+    ]);
+  }
+}
+
+class _NTile extends StatelessWidget {
+  final String label, subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final bool isMain;
+  const _NTile({required this.label, required this.subtitle,
+    required this.value, required this.onChanged, this.isMain = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final tc = TC.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(children: [
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(label, style: TextStyle(
+            fontFamily: AppTypography.displayFont,
+            fontSize: isMain ? 14 : 13,
+            fontWeight: isMain ? FontWeight.w700 : FontWeight.w600,
+            color: tc.textPrimary)),
+          const SizedBox(height: 2),
+          Text(subtitle, style: TextStyle(
+            fontFamily: AppTypography.bodyFont,
+            fontSize: 12, color: tc.textMuted)),
+        ])),
+        const SizedBox(width: 12),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+          activeColor: const Color(AppColors.lime),
+          activeTrackColor: const Color(AppColors.lime).withOpacity(0.25),
+          inactiveThumbColor: const Color(AppColors.textMuted),
+          inactiveTrackColor: Colors.transparent,
+        ),
+      ]),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Privacy Settings Screen
+// ─────────────────────────────────────────────────────────────────────────────
+class _PrivacySettingsScreen extends StatelessWidget {
+  final AppProvider provider;
+  const _PrivacySettingsScreen({required this.provider});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: provider,
+      child: Consumer<AppProvider>(builder: (context, prov, _) {
+        final s = prov.privacySettings;
+        final tc = TC.of(context);
+        final visibility = s['profileVisibility'] as String? ?? 'public';
+        return Scaffold(
+          backgroundColor: tc.pageBg,
+          appBar: AppBar(
+            backgroundColor: tc.cardBg,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+              color: tc.textPrimary,
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: Text('Privacy',
+              style: TextStyle(fontFamily: AppTypography.displayFont,
+                fontSize: 16, fontWeight: FontWeight.w700, color: tc.textPrimary)),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Divider(height: 1, color: tc.border)),
+          ),
+          body: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+
+              // Profile Visibility — segmented picker
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 20, 4, 8),
+                child: Text('PROFILE VISIBILITY', style: TextStyle(
+                  fontFamily: AppTypography.displayFont, fontSize: 11,
+                  fontWeight: FontWeight.w700, color: tc.textMuted, letterSpacing: 1.1)),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: tc.cardBg,
+                  borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                  border: Border.all(color: tc.border),
+                ),
+                child: Column(children: [
+                  for (final opt in [
+                    ('public',  Icons.public_rounded,          'Everyone can see your profile'),
+                    ('friends', Icons.people_outline_rounded,  'Only your followers can see'),
+                    ('private', Icons.lock_outline_rounded,    'Only you can see your profile'),
+                  ]) ...[
+                    InkWell(
+                      onTap: () => prov.setPrivacySetting('profileVisibility', opt.$1),
+                      borderRadius: BorderRadius.circular(AppSizes.radiusMd),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                        child: Row(children: [
+                          Icon(opt.$2, size: 18,
+                            color: visibility == opt.$1
+                                ? const Color(AppColors.lime)
+                                : tc.textMuted),
+                          const SizedBox(width: 12),
+                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                            Text(opt.$1[0].toUpperCase() + opt.$1.substring(1),
+                              style: TextStyle(
+                                fontFamily: AppTypography.displayFont,
+                                fontSize: 13, fontWeight: FontWeight.w600,
+                                color: visibility == opt.$1
+                                    ? const Color(AppColors.lime)
+                                    : tc.textPrimary)),
+                            Text(opt.$3, style: TextStyle(
+                              fontFamily: AppTypography.bodyFont,
+                              fontSize: 12, color: tc.textMuted)),
+                          ])),
+                          if (visibility == opt.$1)
+                            Container(
+                              width: 20, height: 20,
+                              decoration: const BoxDecoration(
+                                color: Color(AppColors.lime), shape: BoxShape.circle),
+                              child: const Icon(Icons.check_rounded, size: 13,
+                                color: Color(AppColors.bg)),
+                            ),
+                        ]),
+                      ),
+                    ),
+                    if (opt.$1 != 'private') Divider(height: 1, indent: 16, color: tc.border),
+                  ],
+                ]),
+              ),
+
+              _NSection('WHAT OTHERS CAN SEE', [
+                _NTile(
+                  label: 'Show Streak',
+                  subtitle: 'Display your streak on your profile',
+                  value: s['showStreak'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('showStreak', v),
+                ),
+                _NTile(
+                  label: 'Show Workouts',
+                  subtitle: 'Let others see your workout history',
+                  value: s['showWorkouts'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('showWorkouts', v),
+                ),
+                _NTile(
+                  label: 'Show Progress Photos',
+                  subtitle: 'Make your progress photos visible',
+                  value: s['showPhotos'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('showPhotos', v),
+                ),
+                _NTile(
+                  label: 'Show on Leaderboard',
+                  subtitle: 'Appear in global and friend rankings',
+                  value: s['showOnLeaderboard'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('showOnLeaderboard', v),
+                ),
+                _NTile(
+                  label: 'Show Activity Feed',
+                  subtitle: 'Share your activity in the community',
+                  value: s['showActivityFeed'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('showActivityFeed', v),
+                ),
+              ]),
+
+              _NSection('CONNECTIONS', [
+                _NTile(
+                  label: 'Allow Friend Requests',
+                  subtitle: 'Let others send you follow requests',
+                  value: s['allowFriendRequests'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('allowFriendRequests', v),
+                ),
+              ]),
+
+              _NSection('DATA', [
+                _NTile(
+                  label: 'Data Sharing',
+                  subtitle: 'Share anonymised data to improve the app',
+                  value: s['dataSharing'] == true,
+                  onChanged: (v) => prov.setPrivacySetting('dataSharing', v),
+                ),
+              ]),
+
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

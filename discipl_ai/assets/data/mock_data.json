@@ -4,7 +4,7 @@
     "name": "Atchayam G.",
     "username": "atchayam",
     "email": "atchayam@example.com",
-    "bio": "Building discipline one day at a time 💪",
+    "bio": "Building discipline one day at a time \ud83d\udcaa",
     "goal": "Lose 10kg by June 2026",
     "currentWeight": 77.5,
     "targetWeight": 72.0,
@@ -17,7 +17,31 @@
     "globalRank": 7,
     "followers": 142,
     "following": 89,
-    "avatarImagePath": null
+    "avatarImagePath": null,
+    "notificationSettings": {
+      "pushEnabled": true,
+      "emailEnabled": true,
+      "streakReminders": true,
+      "habitReminders": true,
+      "workoutReminders": true,
+      "communityActivity": true,
+      "challengeUpdates": true,
+      "aiInsights": true,
+      "weeklyReport": true,
+      "quietHoursEnabled": false,
+      "quietHoursStart": "22:00",
+      "quietHoursEnd": "07:00"
+    },
+    "privacySettings": {
+      "profileVisibility": "public",
+      "showStreak": true,
+      "showWorkouts": true,
+      "showPhotos": true,
+      "showOnLeaderboard": true,
+      "allowFriendRequests": true,
+      "showActivityFeed": true,
+      "dataSharing": false
+    }
   },
   "dashboard": {
     "stats": {
@@ -67,34 +91,34 @@
         "value": 57
       }
     ],
-    "aiPrediction": "At 87% consistency, you're projected to reach your fat loss goal in 11 weeks — 2 weeks ahead of schedule!",
+    "aiPrediction": "At 87% consistency, you're projected to reach your fat loss goal in 11 weeks \u2014 2 weeks ahead of schedule!",
     "habitProgress": [
       {
-        "emoji": "💧",
+        "emoji": "\ud83d\udca7",
         "name": "Water",
         "progress": 0.9,
         "completed": true
       },
       {
-        "emoji": "🏃",
+        "emoji": "\ud83c\udfc3",
         "name": "Steps",
         "progress": 0.85,
         "completed": true
       },
       {
-        "emoji": "😴",
+        "emoji": "\ud83d\ude34",
         "name": "Sleep",
         "progress": 0.71,
         "completed": false
       },
       {
-        "emoji": "📖",
+        "emoji": "\ud83d\udcd6",
         "name": "Reading",
         "progress": 0.57,
         "completed": false
       },
       {
-        "emoji": "🧘",
+        "emoji": "\ud83e\uddd8",
         "name": "Meditate",
         "progress": 0.43,
         "completed": false
@@ -124,7 +148,7 @@
   "habits": [
     {
       "id": "h1",
-      "name": "💧 Drink 3L Water",
+      "name": "\ud83d\udca7 Drink 3L Water",
       "time": "Morning",
       "streak": 21,
       "points": 20,
@@ -133,7 +157,7 @@
     },
     {
       "id": "h2",
-      "name": "🏃 10,000 Steps",
+      "name": "\ud83c\udfc3 10,000 Steps",
       "time": "Anytime",
       "streak": 14,
       "points": 25,
@@ -142,7 +166,7 @@
     },
     {
       "id": "h3",
-      "name": "📖 Read 20 Minutes",
+      "name": "\ud83d\udcd6 Read 20 Minutes",
       "time": "Evening",
       "streak": 8,
       "points": 15,
@@ -151,7 +175,7 @@
     },
     {
       "id": "h4",
-      "name": "😴 Sleep by 10:30 PM",
+      "name": "\ud83d\ude34 Sleep by 10:30 PM",
       "time": "Night",
       "streak": 5,
       "points": 20,
@@ -160,7 +184,7 @@
     },
     {
       "id": "h5",
-      "name": "🧘 Meditate 10 min",
+      "name": "\ud83e\uddd8 Meditate 10 min",
       "time": "Morning",
       "streak": 3,
       "points": 15,
@@ -169,7 +193,7 @@
     },
     {
       "id": "h6",
-      "name": "🥗 Eat Clean Meals",
+      "name": "\ud83e\udd57 Eat Clean Meals",
       "time": "Mealtime",
       "streak": 1,
       "points": 15,
@@ -178,7 +202,7 @@
     },
     {
       "id": "h7",
-      "name": "📝 Journal Entry",
+      "name": "\ud83d\udcdd Journal Entry",
       "time": "Evening",
       "streak": 0,
       "points": 10,
@@ -227,7 +251,7 @@
     {
       "id": "w1",
       "title": "Upper Body Strength",
-      "icon": "💪",
+      "icon": "\ud83d\udcaa",
       "date": "Today",
       "time": "7:00 AM",
       "tags": [
@@ -242,7 +266,7 @@
     {
       "id": "w2",
       "title": "Morning Run",
-      "icon": "🏃",
+      "icon": "\ud83c\udfc3",
       "date": "Yesterday",
       "time": "6:30 AM",
       "tags": [
@@ -256,7 +280,7 @@
     {
       "id": "w3",
       "title": "Leg Day",
-      "icon": "🦵",
+      "icon": "\ud83e\uddb5",
       "date": "Mar 1",
       "time": "8:00 AM",
       "tags": [
@@ -271,7 +295,7 @@
     {
       "id": "w4",
       "title": "Morning Yoga",
-      "icon": "🧘",
+      "icon": "\ud83e\uddd8",
       "date": "Feb 28",
       "time": "7:30 AM",
       "tags": [
@@ -285,7 +309,7 @@
     {
       "id": "w5",
       "title": "Cycling Session",
-      "icon": "🚴",
+      "icon": "\ud83d\udeb4",
       "date": "Feb 27",
       "time": "6:00 PM",
       "tags": [
@@ -303,7 +327,7 @@
       "date": "January 1, 2026",
       "weight": 82.0,
       "label": "Start",
-      "emoji": "🧍",
+      "emoji": "\ud83e\uddcd",
       "badge": "Before",
       "badgeType": "yellow"
     },
@@ -312,7 +336,7 @@
       "date": "January 22, 2026",
       "weight": 80.2,
       "label": "Week 3",
-      "emoji": "🧍‍♂️",
+      "emoji": "\ud83e\uddcd\u200d\u2642\ufe0f",
       "badge": "-1.8 kg",
       "badgeType": "purple"
     },
@@ -321,7 +345,7 @@
       "date": "February 8, 2026",
       "weight": 79.0,
       "label": "Week 5",
-      "emoji": "🏃",
+      "emoji": "\ud83c\udfc3",
       "badge": "-3.0 kg",
       "badgeType": "purple"
     },
@@ -330,8 +354,8 @@
       "date": "March 1, 2026",
       "weight": 77.5,
       "label": "Week 9",
-      "emoji": "💪",
-      "badge": "-4.5 kg ✓",
+      "emoji": "\ud83d\udcaa",
+      "badge": "-4.5 kg \u2713",
       "badgeType": "green"
     }
   ],
@@ -363,12 +387,12 @@
       "userInitials": "RK",
       "userName": "Ramesh K.",
       "userAvatar": "",
-      "badge": "🔥 21 Streak",
+      "badge": "\ud83d\udd25 21 Streak",
       "category": "all",
       "isFriend": true,
       "trendingScore": 45,
       "imageUrl": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80",
-      "text": "Just completed my 21-day streak! The discipline score system keeps me so motivated. Never felt this consistent before. 💪",
+      "text": "Just completed my 21-day streak! The discipline score system keeps me so motivated. Never felt this consistent before. \ud83d\udcaa",
       "likes": 24,
       "liked": false,
       "comments": [
@@ -376,7 +400,7 @@
           "id": "c1",
           "userInitials": "PS",
           "userName": "Priya S.",
-          "text": "Amazing consistency! Keep it up! 🙌",
+          "text": "Amazing consistency! Keep it up! \ud83d\ude4c",
           "time": "2h ago"
         },
         {
@@ -401,12 +425,12 @@
       "userInitials": "PS",
       "userName": "Priya S.",
       "userAvatar": "",
-      "badge": "⭐ Top 10%",
+      "badge": "\u2b50 Top 10%",
       "category": "trending",
       "isFriend": true,
       "trendingScore": 89,
       "imageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
-      "text": "Morning 5K done before sunrise ☀️ Consistency is the key. Day 45 of my running journey! Who else is up at dawn?",
+      "text": "Morning 5K done before sunrise \u2600\ufe0f Consistency is the key. Day 45 of my running journey! Who else is up at dawn?",
       "likes": 31,
       "liked": false,
       "comments": [
@@ -421,7 +445,7 @@
           "id": "c5",
           "userInitials": "AJ",
           "userName": "Arjun J.",
-          "text": "Same! 5AM club for life 🌅",
+          "text": "Same! 5AM club for life \ud83c\udf05",
           "time": "4h ago"
         }
       ],
@@ -432,12 +456,12 @@
       "userInitials": "MV",
       "userName": "Mohan V.",
       "userAvatar": "",
-      "badge": "🏆 Challenge Leader",
+      "badge": "\ud83c\udfc6 Challenge Leader",
       "category": "trending",
       "isFriend": false,
       "trendingScore": 76,
       "imageUrl": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&q=80",
-      "text": "Meal prepped for the whole week 🥗 Clean eating + training = results. Dropped 3kg this month following the AI nutrition plan!",
+      "text": "Meal prepped for the whole week \ud83e\udd57 Clean eating + training = results. Dropped 3kg this month following the AI nutrition plan!",
       "likes": 19,
       "liked": false,
       "comments": [
@@ -463,12 +487,12 @@
       "userInitials": "SN",
       "userName": "Sneha N.",
       "userAvatar": "",
-      "badge": "💪 Strength",
+      "badge": "\ud83d\udcaa Strength",
       "category": "all",
       "isFriend": true,
       "trendingScore": 92,
       "imageUrl": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
-      "text": "New PR on deadlift today — 80kg! 🏋️‍♀️ Six months ago I could barely lift 30kg. Discipl.AI workout plans are literally life changing.",
+      "text": "New PR on deadlift today \u2014 80kg! \ud83c\udfcb\ufe0f\u200d\u2640\ufe0f Six months ago I could barely lift 30kg. Discipl.AI workout plans are literally life changing.",
       "likes": 42,
       "liked": false,
       "comments": [
@@ -476,7 +500,7 @@
           "id": "c8",
           "userInitials": "MV",
           "userName": "Mohan V.",
-          "text": "80kg?! Absolute QUEEN 👑",
+          "text": "80kg?! Absolute QUEEN \ud83d\udc51",
           "time": "1h ago"
         },
         {
@@ -490,7 +514,7 @@
           "id": "c10",
           "userInitials": "AJ",
           "userName": "Arjun J.",
-          "text": "Goals!! Keep crushing it 💥",
+          "text": "Goals!! Keep crushing it \ud83d\udca5",
           "time": "30m ago"
         }
       ],
@@ -501,12 +525,12 @@
       "userInitials": "AJ",
       "userName": "Arjun J.",
       "userAvatar": "",
-      "badge": "🌟 Consistent",
+      "badge": "\ud83c\udf1f Consistent",
       "category": "all",
       "isFriend": false,
       "trendingScore": 34,
       "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
-      "text": "Yoga + meditation morning routine is transforming my mental game 🧘 Stress levels down 60%. Physical fitness is only half the equation.",
+      "text": "Yoga + meditation morning routine is transforming my mental game \ud83e\uddd8 Stress levels down 60%. Physical fitness is only half the equation.",
       "likes": 28,
       "liked": false,
       "comments": [
@@ -525,12 +549,12 @@
       "userInitials": "KR",
       "userName": "Kavya R.",
       "userAvatar": "",
-      "badge": "🚀 Rising Star",
+      "badge": "\ud83d\ude80 Rising Star",
       "category": "trending",
       "isFriend": true,
       "trendingScore": 98,
       "imageUrl": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
-      "text": "Week 1 transformation complete 📊 Down 2kg, up in energy, sleep improved massively. The habit tracking feature is absolutely incredible!",
+      "text": "Week 1 transformation complete \ud83d\udcca Down 2kg, up in energy, sleep improved massively. The habit tracking feature is absolutely incredible!",
       "likes": 56,
       "liked": false,
       "comments": [
@@ -538,7 +562,7 @@
           "id": "c12",
           "userInitials": "RK",
           "userName": "Ramesh K.",
-          "text": "Week 1 legend! Imagine week 12 🔥",
+          "text": "Week 1 legend! Imagine week 12 \ud83d\udd25",
           "time": "30m ago"
         },
         {
@@ -585,7 +609,7 @@
         "points": 1840,
         "pointsMax": 3000,
         "reward": "Gold Badge + 5000 pts",
-        "rewardIcon": "🥇",
+        "rewardIcon": "\ud83e\udd47",
         "rules": [
           "Complete all daily habits",
           "Log at least 4 workouts per week",
@@ -693,7 +717,7 @@
       },
       {
         "id": "c2",
-        "name": "Fat Loss Sprint — April",
+        "name": "Fat Loss Sprint \u2014 April",
         "status": "upcoming",
         "description": "A focused 21-day fat loss sprint combining cardio, nutrition discipline, and accountability.",
         "category": "Fat Loss",
@@ -702,7 +726,7 @@
         "participants": 156,
         "maxParticipants": 300,
         "reward": "Platinum Badge + 8000 pts",
-        "rewardIcon": "🏆",
+        "rewardIcon": "\ud83c\udfc6",
         "rules": [
           "Log cardio 5x per week",
           "No junk food habit streak",
@@ -739,8 +763,8 @@
         "daysTotal": 45,
         "participants": 1240,
         "maxParticipants": 2000,
-        "reward": "Trophy + ₹500 voucher",
-        "rewardIcon": "🎖",
+        "reward": "Trophy + \u20b9500 voucher",
+        "rewardIcon": "\ud83c\udf96",
         "rules": [
           "At least 3 habits per day",
           "Team of 5 members",
@@ -905,32 +929,32 @@
     ],
     "badges": [
       {
-        "name": "🔥 Streak Master",
+        "name": "\ud83d\udd25 Streak Master",
         "desc": "30-day streak",
         "unlocked": true
       },
       {
-        "name": "💪 Iron Will",
+        "name": "\ud83d\udcaa Iron Will",
         "desc": "Score 80+",
         "unlocked": true
       },
       {
-        "name": "🌟 Community Star",
+        "name": "\ud83c\udf1f Community Star",
         "desc": "50 likes received",
         "unlocked": true
       },
       {
-        "name": "🏆 Challenge Winner",
+        "name": "\ud83c\udfc6 Challenge Winner",
         "desc": "Win a challenge",
         "unlocked": true
       },
       {
-        "name": "📊 Data Driven",
+        "name": "\ud83d\udcca Data Driven",
         "desc": "Log 30 workouts",
         "unlocked": true
       },
       {
-        "name": "🚀 Elite",
+        "name": "\ud83d\ude80 Elite",
         "desc": "Score 90+",
         "unlocked": false
       }
@@ -1083,7 +1107,7 @@
         "password": "demo123",
         "name": "Atchayam G.",
         "username": "atchayam",
-        "bio": "Building discipline one day at a time 💪",
+        "bio": "Building discipline one day at a time \ud83d\udcaa",
         "goal": "Lose 10kg by June 2026",
         "avatarInitials": "AG",
         "isPremium": true,
@@ -1110,7 +1134,7 @@
       "category": "Chest",
       "type": "strength",
       "unit": "reps",
-      "icon": "🏋️"
+      "icon": "\ud83c\udfcb\ufe0f"
     },
     {
       "id": "e2",
@@ -1118,7 +1142,7 @@
       "category": "Chest",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e3",
@@ -1126,7 +1150,7 @@
       "category": "Chest",
       "type": "strength",
       "unit": "reps",
-      "icon": "🏋️"
+      "icon": "\ud83c\udfcb\ufe0f"
     },
     {
       "id": "e4",
@@ -1134,7 +1158,7 @@
       "category": "Back",
       "type": "strength",
       "unit": "reps",
-      "icon": "🧗"
+      "icon": "\ud83e\uddd7"
     },
     {
       "id": "e5",
@@ -1142,7 +1166,7 @@
       "category": "Back",
       "type": "strength",
       "unit": "reps",
-      "icon": "🏋️"
+      "icon": "\ud83c\udfcb\ufe0f"
     },
     {
       "id": "e6",
@@ -1150,7 +1174,7 @@
       "category": "Back",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e7",
@@ -1158,7 +1182,7 @@
       "category": "Legs",
       "type": "strength",
       "unit": "reps",
-      "icon": "🦵"
+      "icon": "\ud83e\uddb5"
     },
     {
       "id": "e8",
@@ -1166,7 +1190,7 @@
       "category": "Legs",
       "type": "strength",
       "unit": "reps",
-      "icon": "🦵"
+      "icon": "\ud83e\uddb5"
     },
     {
       "id": "e9",
@@ -1174,7 +1198,7 @@
       "category": "Legs",
       "type": "strength",
       "unit": "reps",
-      "icon": "🚶"
+      "icon": "\ud83d\udeb6"
     },
     {
       "id": "e10",
@@ -1182,7 +1206,7 @@
       "category": "Shoulders",
       "type": "strength",
       "unit": "reps",
-      "icon": "🏋️"
+      "icon": "\ud83c\udfcb\ufe0f"
     },
     {
       "id": "e11",
@@ -1190,7 +1214,7 @@
       "category": "Shoulders",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e12",
@@ -1198,7 +1222,7 @@
       "category": "Arms",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e13",
@@ -1206,7 +1230,7 @@
       "category": "Arms",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e14",
@@ -1214,7 +1238,7 @@
       "category": "Core",
       "type": "strength",
       "unit": "seconds",
-      "icon": "🧘"
+      "icon": "\ud83e\uddd8"
     },
     {
       "id": "e15",
@@ -1222,7 +1246,7 @@
       "category": "Core",
       "type": "strength",
       "unit": "reps",
-      "icon": "💪"
+      "icon": "\ud83d\udcaa"
     },
     {
       "id": "e16",
@@ -1230,7 +1254,7 @@
       "category": "Cardio",
       "type": "cardio",
       "unit": "km",
-      "icon": "🏃"
+      "icon": "\ud83c\udfc3"
     },
     {
       "id": "e17",
@@ -1238,7 +1262,7 @@
       "category": "Cardio",
       "type": "cardio",
       "unit": "km",
-      "icon": "🚴"
+      "icon": "\ud83d\udeb4"
     },
     {
       "id": "e18",
@@ -1246,7 +1270,7 @@
       "category": "Cardio",
       "type": "cardio",
       "unit": "minutes",
-      "icon": "⏱"
+      "icon": "\u23f1"
     },
     {
       "id": "e19",
@@ -1254,7 +1278,7 @@
       "category": "Cardio",
       "type": "cardio",
       "unit": "reps",
-      "icon": "🔥"
+      "icon": "\ud83d\udd25"
     },
     {
       "id": "e20",
@@ -1262,7 +1286,7 @@
       "category": "Cardio",
       "type": "cardio",
       "unit": "laps",
-      "icon": "🏊"
+      "icon": "\ud83c\udfca"
     },
     {
       "id": "e21",
@@ -1270,7 +1294,7 @@
       "category": "Flexibility",
       "type": "flexibility",
       "unit": "minutes",
-      "icon": "🧘"
+      "icon": "\ud83e\uddd8"
     },
     {
       "id": "e22",
@@ -1278,14 +1302,14 @@
       "category": "Flexibility",
       "type": "flexibility",
       "unit": "minutes",
-      "icon": "🤸"
+      "icon": "\ud83e\udd38"
     }
   ],
   "notifications": [
     {
       "id": "n1",
       "type": "streak",
-      "title": "🔥 Streak Milestone!",
+      "title": "\ud83d\udd25 Streak Milestone!",
       "body": "You've hit a 21-day streak. Keep the fire burning!",
       "time": "2 min ago",
       "read": false,
@@ -1294,7 +1318,7 @@
     {
       "id": "n2",
       "type": "habit",
-      "title": "⏰ Habit Reminder",
+      "title": "\u23f0 Habit Reminder",
       "body": "Don't forget: Meditate 10 min is scheduled for this morning.",
       "time": "1 hour ago",
       "read": false,
@@ -1303,7 +1327,7 @@
     {
       "id": "n3",
       "type": "achievement",
-      "title": "🏆 New Achievement Unlocked",
+      "title": "\ud83c\udfc6 New Achievement Unlocked",
       "body": "You earned the 'Iron Will' badge for completing 7 days in a row.",
       "time": "3 hours ago",
       "read": false,
@@ -1312,7 +1336,7 @@
     {
       "id": "n4",
       "type": "community",
-      "title": "👥 Priya S. liked your post",
+      "title": "\ud83d\udc65 Priya S. liked your post",
       "body": "Your workout log got 12 likes from the community this week.",
       "time": "5 hours ago",
       "read": true,
@@ -1321,8 +1345,8 @@
     {
       "id": "n5",
       "type": "ai",
-      "title": "✦ AI Insight Ready",
-      "body": "Your weekly performance report is ready. You scored 847 this week — up 12%!",
+      "title": "\u2726 AI Insight Ready",
+      "body": "Your weekly performance report is ready. You scored 847 this week \u2014 up 12%!",
       "time": "Yesterday",
       "read": true,
       "icon": "ai"
@@ -1330,7 +1354,7 @@
     {
       "id": "n6",
       "type": "challenge",
-      "title": "⭐ Challenge Update",
+      "title": "\u2b50 Challenge Update",
       "body": "Only 3 days left in the '30-Day Discipline' challenge. You're in the top 10%!",
       "time": "Yesterday",
       "read": true,
@@ -1339,7 +1363,7 @@
     {
       "id": "n7",
       "type": "workout",
-      "title": "💪 Workout Logged",
+      "title": "\ud83d\udcaa Workout Logged",
       "body": "Great session! Your Push Day workout was saved. +30 discipline points.",
       "time": "2 days ago",
       "read": true,
@@ -1348,7 +1372,7 @@
     {
       "id": "n8",
       "type": "leaderboard",
-      "title": "📈 Leaderboard Move",
+      "title": "\ud83d\udcc8 Leaderboard Move",
       "body": "You climbed 3 spots to #7 on the global leaderboard. Keep pushing!",
       "time": "2 days ago",
       "read": true,

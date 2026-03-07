@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/app_constants.dart';
@@ -621,6 +624,27 @@ class _AppIconBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget imageChild;
+
+    if (isAvatar) {
+      final provider = context.watch<AppProvider>();
+      final bytes    = provider.webAvatarBytes;
+      final path     = provider.avatarImagePath;
+
+      if (kIsWeb && bytes != null) {
+        imageChild = Image.memory(bytes, fit: BoxFit.cover, width: size, height: size);
+      } else if (!kIsWeb && path != null) {
+        final file = File(path);
+        imageChild = file.existsSync()
+            ? Image.file(file, fit: BoxFit.cover, width: size, height: size)
+            : _appIconFallback(size);
+      } else {
+        imageChild = _appIconFallback(size);
+      }
+    } else {
+      imageChild = _appIconFallback(size);
+    }
+
     return Container(
       width: size, height: size,
       decoration: BoxDecoration(
@@ -631,13 +655,18 @@ class _AppIconBox extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius - 1),
-        child: Image.asset('assets/images/app_icon.png', fit: BoxFit.cover, width: size, height: size,
-          errorBuilder: (_, __, ___) => Center(child: Text('D',
-            style: TextStyle(fontFamily: AppTypography.displayFont, fontWeight: FontWeight.w900,
-              fontSize: size * 0.5, color: const Color(AppColors.lime))))),
+        child: imageChild,
       ),
     );
   }
+
+  Widget _appIconFallback(double size) => Image.asset(
+    'assets/images/app_icon.png',
+    fit: BoxFit.cover, width: size, height: size,
+    errorBuilder: (_, __, ___) => Center(child: Text('D',
+      style: TextStyle(fontFamily: AppTypography.displayFont, fontWeight: FontWeight.w900,
+        fontSize: size * 0.5, color: const Color(AppColors.lime)))),
+  );
 }
 
 // ─── Nav data ─────────────────────────────────────────────────────────────────

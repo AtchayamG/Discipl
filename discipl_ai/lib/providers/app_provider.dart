@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -304,13 +305,15 @@ class AppProvider extends ChangeNotifier {
   }
 
   // \u2500\u2500\u2500 Update Profile \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-  Future<void> updateProfile(Map<String, dynamic> updates) async {
+  Future<void> updateProfile(Map<String, dynamic> updates, {Uint8List? webImageBytes}) async {
     try {
       final user = Map<String, dynamic>.from(
           _data['user'] as Map<String, dynamic>? ?? {});
       user.addAll(updates);
       _data = Map<String, dynamic>.from(_data);
       _data['user'] = user;
+      // Store web image bytes so the profile view can show them
+      if (webImageBytes != null) _webAvatarBytes = webImageBytes;
       // Also update currentUser
       if (_currentUser != null) {
         _currentUser = Map<String, dynamic>.from(_currentUser!);
@@ -380,6 +383,10 @@ class AppProvider extends ChangeNotifier {
   }
 
   // ─── Profile helpers ──────────────────────────────────────────────────────
+  // Web: bytes stored in memory (can't use File paths on web)
+  Uint8List? _webAvatarBytes;
+  Uint8List? get webAvatarBytes => _webAvatarBytes;
+
   String? get avatarImagePath {
     final user = _data['user'] as Map<String, dynamic>?;
     final path = user?['avatarImagePath'];
@@ -389,6 +396,51 @@ class AppProvider extends ChangeNotifier {
   String get userBio {
     final user = _data['user'] as Map<String, dynamic>?;
     return user?['bio'] as String? ?? '';
+  }
+
+  // ─── Notification settings ─────────────────────────────────────────────────
+  Map<String, dynamic> get notificationSettings {
+    final user = _data['user'] as Map<String, dynamic>?;
+    final raw = user?['notificationSettings'];
+    if (raw is Map) return Map<String, dynamic>.from(raw);
+    return {
+      'pushEnabled': true, 'emailEnabled': true, 'streakReminders': true,
+      'habitReminders': true, 'workoutReminders': true, 'communityActivity': true,
+      'challengeUpdates': true, 'aiInsights': true, 'weeklyReport': true,
+      'quietHoursEnabled': false, 'quietHoursStart': '22:00', 'quietHoursEnd': '07:00',
+    };
+  }
+
+  void setNotificationSetting(String key, dynamic value) {
+    final user = Map<String, dynamic>.from(_data['user'] as Map<String, dynamic>? ?? {});
+    final settings = Map<String, dynamic>.from(notificationSettings);
+    settings[key] = value;
+    user['notificationSettings'] = settings;
+    _data = Map<String, dynamic>.from(_data);
+    _data['user'] = user;
+    notifyListeners();
+  }
+
+  // ─── Privacy settings ──────────────────────────────────────────────────────
+  Map<String, dynamic> get privacySettings {
+    final user = _data['user'] as Map<String, dynamic>?;
+    final raw = user?['privacySettings'];
+    if (raw is Map) return Map<String, dynamic>.from(raw);
+    return {
+      'profileVisibility': 'public', 'showStreak': true, 'showWorkouts': true,
+      'showPhotos': true, 'showOnLeaderboard': true, 'allowFriendRequests': true,
+      'showActivityFeed': true, 'dataSharing': false,
+    };
+  }
+
+  void setPrivacySetting(String key, dynamic value) {
+    final user = Map<String, dynamic>.from(_data['user'] as Map<String, dynamic>? ?? {});
+    final settings = Map<String, dynamic>.from(privacySettings);
+    settings[key] = value;
+    user['privacySettings'] = settings;
+    _data = Map<String, dynamic>.from(_data);
+    _data['user'] = user;
+    notifyListeners();
   }
 
   // ─── Notifications ────────────────────────────────────────────────────────
