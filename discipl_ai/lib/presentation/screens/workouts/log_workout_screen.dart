@@ -431,7 +431,7 @@ class _LogWorkoutScreenState extends State<LogWorkoutScreen> {
               borderRadius: BorderRadius.circular(AppSizes.radiusMd),
             ),
             child: Text(
-              _saving ? 'Saving...' : 'Save Workout  +\${_estimatePoints()} pts',
+              _saving ? 'Saving...' : 'Save Workout  +${_estimatePoints()} pts',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: AppTypography.displayFont,

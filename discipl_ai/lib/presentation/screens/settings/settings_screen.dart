@@ -956,7 +956,7 @@ class _NotificationSettingsScreen extends StatelessWidget {
               child: Divider(height: 1, color: tc.border)),
           ),
           body: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom),
             children: [
               _NSection('PUSH NOTIFICATIONS', [
                 _NTile(
@@ -1141,7 +1141,7 @@ class _PrivacySettingsScreen extends StatelessWidget {
               child: Divider(height: 1, color: tc.border)),
           ),
           body: ListView(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom),
             children: [
 
               // Profile Visibility — segmented picker

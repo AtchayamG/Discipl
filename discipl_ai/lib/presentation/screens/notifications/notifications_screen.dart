@@ -74,7 +74,7 @@ class NotificationsScreen extends StatelessWidget {
       body: notifications.isEmpty
           ? _EmptyNotifications(tc: tc)
           : ListView.builder(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.fromLTRB(0, 8, 0, 8 + MediaQuery.of(context).padding.bottom),
               itemCount: notifications.length,
               itemBuilder: (context, i) {
                 final n = notifications[i];

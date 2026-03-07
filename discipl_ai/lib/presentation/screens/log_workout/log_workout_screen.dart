@@ -122,7 +122,7 @@ class _LogWorkoutScreenState extends State<LogWorkoutScreen> {
                 child: ElevatedButton(onPressed: _saveWorkout, child: const Text('Save'))),
         ],
       ),
-      body: ListView(padding: const EdgeInsets.all(16), children: [
+      body: ListView(padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).padding.bottom), children: [
 
         // Progress bar
         if (_totalSets > 0) ...[
